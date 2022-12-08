@@ -1,0 +1,16 @@
+<div class="lobby">
+  <app-sidebar></app-sidebar>
+  <app-notification></app-notification>
+
+  <div class="listOfInvitations">
+    <h1>Invitaciones</h1>
+    <p *ngIf="invitations" class="invitationItem">Vacio . . .</p>
+    <div *ngFor="let item of invitations" class="invitationItem">
+      <p>
+        El usuario {{ item.username }} te ha invitado a {{ item.groupName }}
+      </p>
+      <button (click)="aceptarInvitacion(item.groupID)">Aceptar</button>
+      <button (click)="rechazarInvitacion(item.groupID)">Rechazar</button>
+    </div>
+  </div>
+</div>

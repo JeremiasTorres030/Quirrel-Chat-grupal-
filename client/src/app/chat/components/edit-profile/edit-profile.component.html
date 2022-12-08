@@ -1,0 +1,22 @@
+<div class="editProfileForm">
+  <div class="editProfileFormCard" (click)="stopPropagation($event)">
+    <h1>Editar Perfil</h1>
+    <form [formGroup]="editUserForm" (ngSubmit)="submitEditProfile()">
+      <label>Nombre de usuario</label>
+      <input
+        type="text"
+        formControlName="username"
+        placeholder="Nombre de usuario"
+      />
+      <label class="error">{{ customError }}</label>
+
+      <label>Imagen de perfil (URL)</label>
+      <input
+        type="url"
+        formControlName="image"
+        placeholder="Imagen de perfil"
+      />
+      <button type="submit" [disabled]="editButton()">Editar</button>
+    </form>
+  </div>
+</div>

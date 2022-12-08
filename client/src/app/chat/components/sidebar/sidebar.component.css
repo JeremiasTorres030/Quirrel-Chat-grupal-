@@ -1,0 +1,184 @@
+::-webkit-scrollbar {
+  width: 0;
+}
+
+* {
+  font-family: "Noto Sans Display", sans-serif;
+}
+
+.sideBar {
+  display: flex;
+}
+
+.createAndGroups {
+  position: relative;
+  background-color: rgb(58, 17, 139);
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  height: 100vh;
+  text-align: center;
+  color: white;
+}
+
+.lobby,
+.create {
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 18px;
+  color: white;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(12, 15, 46);
+  background-color: rgb(32, 36, 70);
+  margin: 5px 0;
+  transition: all 300ms;
+  width: 75px;
+  height: 75px;
+  border-radius: 100%;
+}
+.group {
+  margin-bottom: 8px;
+}
+
+img {
+  width: 75px;
+  height: 75px;
+  border-radius: 100%;
+}
+
+p,
+h3 {
+  margin: 0;
+}
+
+.user {
+  position: absolute;
+  bottom: 30px;
+}
+
+.user .userOptions {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  position: absolute;
+  left: 85px;
+  bottom: -20px;
+  margin: auto 5px;
+  z-index: 9999;
+  background-color: rgb(97, 50, 190);
+  border-radius: 8px;
+}
+
+.user button {
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 18px;
+  width: 130px;
+  height: 40px;
+  color: white;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(12, 15, 46);
+  background-color: rgb(32, 36, 70);
+  transition: all 300ms;
+  margin-top: 10px;
+}
+
+.user .logoutButton:hover {
+  color: rgb(254, 109, 109);
+  font-weight: 600;
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
+}
+
+.user .editButton:hover {
+  font-weight: 600;
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
+}
+
+.groups {
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 40px;
+  padding: 10px 5px;
+  overflow: scroll;
+  height: 50vh;
+  width: 80%;
+}
+
+.createGroupForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.519);
+  z-index: 9999;
+}
+
+.createGroupFormCard {
+  width: fit-content;
+  height: fit-content;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+  background-color: rgb(97, 50, 190);
+  padding: 50px;
+  border-radius: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+form input {
+  width: 280px;
+  padding: 5px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(19, 21, 49);
+}
+
+form input:focus {
+  border: 5px rgb(93, 46, 186) solid;
+  border-radius: 5px;
+  outline: 0;
+}
+
+form input:hover {
+  border: 3px rgb(93, 46, 186) solid;
+}
+
+.createGroupFormCard button {
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 18px;
+  width: 130px;
+  height: 40px;
+  color: white;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(12, 15, 46);
+  background-color: rgb(32, 36, 70);
+  margin: 10px 0;
+  transition: all 300ms;
+}
+
+.createGroupFormCard button:hover {
+  font-weight: 600;
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
+}
+
+.createGroupFormCard button:disabled {
+  background-color: rgb(110, 99, 132);
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
+}
+
+app-edit-profile {
+  position: absolute;
+}

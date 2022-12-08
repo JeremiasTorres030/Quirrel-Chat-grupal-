@@ -1,0 +1,55 @@
+<div class="membersBar">
+  <div class="listOfMembers">
+    <h1>Miembros</h1>
+    <div class="addmember">
+      <button (click)="activarInvitacion()">+</button>
+      <h3>Añadir miembro</h3>
+    </div>
+    <div class="member" *ngFor="let member of groupMembers">
+      <img [src]="member.image" alt="userImage" (error)="imageError($event)" />
+      <div class="rolUsername">
+        <small>{{ member.rol | titlecase }}</small>
+        <h3>{{ member.username }}</h3>
+      </div>
+    </div>
+
+    <div class="exitGroup">
+      <button (click)="salirDelGrupo()">-</button>
+      <h3>Salir del grupo</h3>
+    </div>
+  </div>
+
+  <div
+    class="listOfUsers"
+    *ngIf="mostrarInvitacion"
+    (click)="activarInvitacion()"
+  >
+    <div class="listOfUsersCard" (click)="prueba($event)">
+      <h1>Añadir usuario</h1>
+      <label class="error" *ngIf="errorPersonalizado">{{
+        errorPersonalizado
+      }}</label>
+      <form [formGroup]="formularioDeInvitacion">
+        <input type="text" formControlName="miembro" />
+        <div *ngIf="showListOfMembers" class="listOfinvitations">
+          <div
+            *ngFor="let item of showListOfMembers"
+            (click)="seleccionarUsuario(item.id, item.username)"
+            class="memberCard"
+          >
+            <img [src]="item.image" alt="user" (error)="imageError($event)" />
+            <p>{{ item.username }}</p>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="formularioDeInvitacion.invalid"
+          (click)="enviarInvitacion()"
+        >
+          Enviar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

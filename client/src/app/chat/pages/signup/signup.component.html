@@ -1,0 +1,81 @@
+<div class="signupComponent">
+  <div class="signupCard">
+    <h1>Registrarse</h1>
+    <label class="error" *ngIf="errorPersonalizado">{{
+      errorPersonalizado
+    }}</label>
+    <form [formGroup]="signUpForm" autocomplete="off" (ngSubmit)="signup()">
+      <label>Nombre de usuario</label>
+      <input
+        type="text"
+        formControlName="username"
+        placeholder="Ingrese un nombre de usuario"
+      />
+      <label
+        class="error"
+        *ngIf="
+          signUpForm.get('username')?.invalid &&
+          signUpForm.get('username')?.touched
+        "
+        >Introduzca un nombre de usuario valido</label
+      >
+      <label>Imagen de perfil (URL)</label>
+      <input
+        type="url"
+        formControlName="image"
+        placeholder="Ingrese una URL (opcional)"
+      />
+
+      <label>Correo electronico</label>
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Ingrese un correo electronico"
+      />
+      <label
+        class="error"
+        *ngIf="
+          signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched
+        "
+        >Introduzca un correo electronico valido</label
+      >
+      <label>Contraseña</label>
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Ingrese una contraseña valida"
+      />
+      <label
+        class="error"
+        *ngIf="
+          signUpForm.get('password')?.invalid &&
+          signUpForm.get('password')?.touched
+        "
+        >Introduzca una contraseña valida</label
+      >
+      <label class="error" *ngIf="signUpForm.getError('notEqual')"
+        >Las contraseñas no coinciden</label
+      >
+
+      <label>Confirmar contraseña</label>
+      <input
+        type="password"
+        formControlName="passwordEqual"
+        placeholder="Ingrese una contraseña valida"
+      />
+      <label
+        class="error"
+        *ngIf="
+          signUpForm.get('passwordEqual')?.invalid &&
+          signUpForm.get('passwordEqual')?.touched
+        "
+        >Introduzca una contraseña valida</label
+      >
+      <label class="error" *ngIf="signUpForm.getError('notEqual')"
+        >Las contraseñas no coinciden</label
+      >
+      <button type="submit" [disabled]="signUpForm.invalid">Registrarse</button>
+    </form>
+    <a routerLink="/login">Ya estas registrado? Clickea aqui.</a>
+  </div>
+</div>

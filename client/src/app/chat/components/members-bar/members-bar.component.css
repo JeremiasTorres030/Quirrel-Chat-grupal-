@@ -1,0 +1,159 @@
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(88, 8, 208);
+}
+.membersBar {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.rolUsername {
+  display: flex;
+  flex-direction: column;
+}
+
+.rolUsername * {
+  margin: 0 5px;
+}
+
+.member img {
+  border-radius: 100%;
+  width: 50px;
+}
+
+.addmember button,
+.exitGroup button {
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 18px;
+  width: 50px;
+  height: 50px;
+  color: white;
+  border-radius: 100%;
+  margin-right: 8px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(12, 15, 46);
+  background-color: rgb(32, 36, 70);
+  transition: all 300ms;
+}
+
+.addmember button:hover,
+.exitGroup button :hover {
+  font-weight: 600;
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
+}
+
+.memberCard {
+  display: flex;
+  background-color: rgb(54, 17, 129);
+  padding: 5px;
+  border-radius: 8px;
+  margin: 5px 0;
+  width: 250px;
+}
+
+.memberCard img {
+  width: 50px;
+  border-radius: 100%;
+  margin-right: 8px;
+}
+
+.exitGroup,
+.addmember {
+  display: flex;
+  align-items: center;
+}
+
+.listOfUsers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.519);
+  z-index: 9999;
+}
+
+.listOfUsersCard {
+  width: fit-content;
+  height: fit-content;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+  background-color: rgb(97, 50, 190);
+  padding: 50px;
+  border-radius: 10px;
+}
+
+.listOfUsersCard form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.listOfUsers input {
+  width: 280px;
+  padding: 5px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(19, 21, 49);
+}
+
+.listOfUsers input:focus {
+  border: 5px rgb(93, 46, 186) solid;
+  border-radius: 5px;
+  outline: 0;
+}
+
+.listOfUsers input:hover {
+  border: 3px rgb(93, 46, 186) solid;
+}
+
+.listOfUsers button {
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 18px;
+  width: 130px;
+  height: 40px;
+  color: white;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(12, 15, 46);
+  background-color: rgb(32, 36, 70);
+  margin: 10px 0;
+  transition: all 300ms;
+}
+
+.listOfUsers button:hover {
+  font-weight: 600;
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
+}
+
+.listOfUsers button:disabled {
+  background-color: rgb(110, 99, 132);
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
+}
+
+.error {
+  color: rgb(246, 255, 0);
+  margin-bottom: 5px;
+}
+
+.listOfinvitations {
+  background-color: rgb(136, 92, 223);
+  padding: 5px;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: scroll;
+}

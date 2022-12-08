@@ -1,0 +1,22 @@
+<div class="editGroupForm">
+  <div class="editGroupFormCard" (click)="stopPropagation($event)">
+    <h1>Editar grupo</h1>
+    <form [formGroup]="editGroupForm" (ngSubmit)="submitEditGroup()">
+      <label>Nombre del grupo</label>
+      <input
+        type="text"
+        formControlName="groupname"
+        placeholder="Nombre del grupo"
+      />
+      <label class="error">{{ customError }}</label>
+
+      <label>Imagen del grupo (URL)</label>
+      <input
+        type="url"
+        formControlName="image"
+        placeholder="Imagen del grupo"
+      />
+      <button type="submit" [disabled]="editButton()">Editar</button>
+    </form>
+  </div>
+</div>

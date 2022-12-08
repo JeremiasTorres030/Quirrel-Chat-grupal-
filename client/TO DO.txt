@@ -1,0 +1,6 @@
+
+-Agregar roles, y edicion del grupo (cosa que solo puede hacer el creador del mismo)
+
+-Agregar una seccion de editar grupo
+
+-Arreglar el temblor de las cards donde se encuentran formularios

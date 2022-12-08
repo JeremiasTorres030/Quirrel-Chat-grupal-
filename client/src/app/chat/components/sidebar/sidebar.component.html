@@ -1,0 +1,59 @@
+<div class="sideBar">
+  <div class="createAndGroups">
+    <button routerLink="/user/lobby" class="lobby">Lobby</button>
+    <button (click)="ventanaCrear()" class="create">Crear Grupo</button>
+    <div class="groups">
+      <div
+        *ngFor="let item of userGroups; let i = index"
+        routerLink="/user/group/{{ item._id }}"
+        class="group"
+      >
+        <img [src]="item.image" alt="groupImage" (error)="imageError($event)" />
+
+        <p>{{ item.groupname }}</p>
+      </div>
+    </div>
+    <div class="user" (click)="userConfig()">
+      <img
+        [src]="user.image"
+        alt="userLoggedImg"
+        (error)="imageError($event)"
+      />
+      <div *ngIf="userOptions" class="userOptions">
+        <h3>{{ user.username}}</h3>
+        <button (click)="editarPerfil()" class="editButton">
+          Editar perfil
+        </button>
+        <button (click)="cerrarSesion()" class="logoutButton">
+          Cerrar sesion
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="createGroupForm" (click)="ventanaCrear()" *ngIf="ventana">
+    <div class="createGroupFormCard" (click)="stopPropagation($event)">
+      <h1>Crear Grupo</h1>
+      <form [formGroup]="groupForm" (ngSubmit)="crearGrupo()">
+        <label>Nombre del Grupo</label>
+        <input
+          type="text"
+          placeholder="Introduzca el nombre del grupo"
+          formControlName="groupname"
+        />
+        <label>Imagen del grupo (opcional)</label>
+        <input
+          type="text"
+          placeholder="Imagen del grupo(URL)"
+          formControlName="image"
+        />
+        <button type="submit" [disabled]="groupForm.invalid">Crear</button>
+      </form>
+    </div>
+  </div>
+
+  <app-edit-profile
+    *ngIf="editProfile"
+    (click)="editarPerfil()"
+    (editProfile)="editarPerfil()"
+  ></app-edit-profile>
+</div>

@@ -1,0 +1,48 @@
+<div class="groupComponent">
+  <div class="sidebar">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <app-notification></app-notification>
+  <app-edit-group
+    *ngIf="editGroup"
+    (editGroup)="editGroupSucces()"
+    (click)="editGroupButton()"
+  ></app-edit-group>
+
+  <div class="chat" id="chat">
+    <div class="titulo">
+      <h1>{{ gname }}</h1>
+      <button *ngIf="permisosDeAdmin" (click)="editGroupButton()">
+        Editar grupo
+      </button>
+    </div>
+
+    <div
+      *ngFor="let message of groupMessage"
+      class="message"
+      [ngClass]="{
+        tumensaje: message.username === user,
+        memberJoin: message.type === 'member'
+      }"
+    >
+      <img [src]="message.image" alt="userImage" (error)="imageError($event)" />
+      <div>
+        <h4>{{ message.username | usernameNotFound }}</h4>
+        <p>{{ message.message }}</p>
+      </div>
+    </div>
+
+    <div class="padding"></div>
+
+    <app-chat-input
+      (messageEvent)="actualizarMensajes($event)"
+    ></app-chat-input>
+  </div>
+
+  <app-members-bar
+    [permisosDeAdmin]="permisosDeAdmin"
+    [groupMembers]="groupMembers"
+  >
+  </app-members-bar>
+</div>

@@ -1,0 +1,4 @@
+<form [formGroup]="messageForm" (ngSubmit)="sendMessageForm()">
+  <input type="text" formControlName="message" />
+  <button type="submit" [disabled]="messageForm.invalid">+</button>
+</form>
