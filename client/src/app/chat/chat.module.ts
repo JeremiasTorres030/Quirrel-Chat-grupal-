@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { ChatRoutingModule } from './chat-routing.module';
-import { InicioComponent } from './pages/inicio/inicio.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { LobbyComponent } from './pages/securePages/lobby/lobby.component';
@@ -15,10 +14,11 @@ import { NotificationComponent } from './components/notification/notification.co
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { UsernameNotFoundPipe } from './pipes/username-not-found.pipe';
 import { EditGroupComponent } from './components/edit-group/edit-group.component';
+import { DeleteGroupComponent } from './components/delete-group/delete-group.component';
+import { MemeberInvitationComponent } from './components/memeber-invitation/memeber-invitation.component';
 
 @NgModule({
   declarations: [
-    InicioComponent,
     LoginComponent,
     SignupComponent,
     LobbyComponent,
@@ -30,6 +30,8 @@ import { EditGroupComponent } from './components/edit-group/edit-group.component
     EditProfileComponent,
     UsernameNotFoundPipe,
     EditGroupComponent,
+    DeleteGroupComponent,
+    MemeberInvitationComponent,
   ],
   imports: [CommonModule, ChatRoutingModule, ReactiveFormsModule],
 })

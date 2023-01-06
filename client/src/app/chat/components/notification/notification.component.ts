@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
@@ -18,6 +18,7 @@ export class NotificationComponent implements OnInit {
   public activar: boolean = false;
   public data!: any;
   public gid!: string;
+  @Output() actualizarInvitaciones = new EventEmitter<any>();
 
   ngOnInit(): void {
     this.routerActive.params.subscribe(({ id }) => {
@@ -56,6 +57,11 @@ export class NotificationComponent implements OnInit {
         gid: this.data.gid,
       })
       .subscribe();
+    this.activar = false;
+  }
+
+  cerrarInvitacion(): void {
+    this.actualizarInvitaciones.emit();
     this.activar = false;
   }
 }

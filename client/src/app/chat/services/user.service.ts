@@ -97,6 +97,16 @@ export class UserService {
     return this.http.put<any>(`${this.apiUrl}user/edit/${this.user.id}`, data);
   }
 
+  getUserInvitations(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}user/${this.user.id}`).pipe(
+      tap((res: any) => {
+        if (res.ok) {
+          this.user.invitations = res.data;
+        }
+      })
+    );
+  }
+
   getAllusers(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}user/all`);
   }

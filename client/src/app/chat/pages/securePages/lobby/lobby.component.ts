@@ -31,6 +31,7 @@ export class LobbyComponent implements OnInit {
         if (res.ok) {
           this.router.navigateByUrl(`/user/group/${res.data.gid}`);
           this.userService.socket.emit('updateGroup');
+          this.actualizarInvitacion();
         }
       });
   }
@@ -41,6 +42,18 @@ export class LobbyComponent implements OnInit {
         uid: this.userService.user.id,
         gid,
       })
-      .subscribe();
+      .subscribe((res) => {
+        if (res.ok) {
+          this.actualizarInvitacion();
+        }
+      });
+  }
+
+  actualizarInvitacion(): void {
+    this.userService.getUserInvitations().subscribe((res) => {
+      if (res.ok) {
+        this.invitations = this.userService.user.invitations;
+      }
+    });
   }
 }

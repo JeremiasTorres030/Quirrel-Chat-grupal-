@@ -124,8 +124,9 @@ h3 {
   color: white;
   text-align: center;
   background-color: rgb(97, 50, 190);
-  padding: 50px;
+  padding: 20px;
   border-radius: 10px;
+  position: relative;
 }
 
 form {
@@ -148,10 +149,6 @@ form input:focus {
   border: 5px rgb(93, 46, 186) solid;
   border-radius: 5px;
   outline: 0;
-}
-
-form input:hover {
-  border: 3px rgb(93, 46, 186) solid;
 }
 
 .createGroupFormCard button {
@@ -181,4 +178,12 @@ form input:hover {
 
 app-edit-profile {
   position: absolute;
+}
+
+.createGroupFormCard .closeCreateGroup {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  top: 0;
+  right: 5px;
 }

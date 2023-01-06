@@ -60,4 +60,8 @@ export class GroupService {
   editGroup(gid: string, values: any): Observable<any> {
     return this.http.put(`${this.apiUrl}group/edit/${gid}`, values);
   }
+
+  deleteGroup(gid: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}group/delete/${gid}`);
+  }
 }

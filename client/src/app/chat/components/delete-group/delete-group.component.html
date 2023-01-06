@@ -1,0 +1,23 @@
+<div class="deleteGroupForm" (click)="activarEliminarGrupo()">
+  <div class="deleteGroupFormCard" (click)="stopPropagation($event)">
+    <button class="cerrarDeleteGrupo" (click)="activarEliminarGrupo()">
+      X
+    </button>
+    <h1>Eliminar grupo</h1>
+    <form [formGroup]="formularioParaEliminar">
+      <label class="error">Ingrese el nombre del grupo "{{ gname }}"</label>
+      <input
+        type="text"
+        formControlName="eliminar"
+        placeholder="Nombre del grupo"
+      />
+      <button
+        [disabled]="formularioParaEliminar.invalid"
+        type="submit"
+        (click)="eliminarGrupo()"
+      >
+        Eliminar
+      </button>
+    </form>
+  </div>
+</div>

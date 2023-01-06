@@ -1,5 +1,6 @@
 <div class="notificationCard" *ngIf="activar">
   <div class="notification">
+    <button (click)="cerrarInvitacion()" class="cerrarInvitacion">X</button>
     <h1>El usuario {{ data.user }} te ha invitado a {{ data.groupname }}</h1>
     <button (click)="aceptarInvitacion()">Aceptar</button>
     <button (click)="rechazarInvitacion()">Rechazar</button>

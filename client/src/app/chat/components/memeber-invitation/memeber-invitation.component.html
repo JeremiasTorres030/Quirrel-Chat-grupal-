@@ -1,0 +1,29 @@
+<div class="listOfUsers" (click)="cerrarInvitacion()">
+  <div class="listOfUsersCard" (click)="stopPropagation($event)">
+    <button class="closeListOfUserCard" (click)="cerrarInvitacion()">X</button>
+    <h1>Añadir usuario</h1>
+    <label class="error" *ngIf="errorPersonalizado">{{
+      errorPersonalizado
+    }}</label>
+    <form [formGroup]="formularioDeInvitacion">
+      <input type="text" formControlName="miembro" />
+      <div *ngIf="showListOfMembers" class="listOfinvitations">
+        <div
+          *ngFor="let item of showListOfMembers"
+          (click)="seleccionarUsuario(item.id, item.username)"
+          class="memberCard"
+        >
+          <img [src]="item.image" alt="user" (error)="imageError($event)" />
+          <p>{{ item.username }}</p>
+        </div>
+      </div>
+      <button
+        type="submit"
+        [disabled]="formularioDeInvitacion.invalid"
+        (click)="enviarInvitacion()"
+      >
+        Enviar
+      </button>
+    </form>
+  </div>
+</div>

@@ -2,7 +2,10 @@ import { Request, Response } from 'express'
 import { user } from '../models/user.model'
 import bcryptjs from 'bcryptjs'
 import { jwtGenerator } from '../helpers/jwtGenerator'
-export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
+export const getAllUsers = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const response = await user.find()
 
@@ -13,7 +16,7 @@ export const getAllUsers = async (_req: Request, res: Response): Promise<void> =
 
       res.status(200).json({
         ok: true,
-        data: userData
+        data: userData,
       })
 
       return
@@ -21,32 +24,39 @@ export const getAllUsers = async (_req: Request, res: Response): Promise<void> =
   } catch (error) {
     console.log(error)
     res.status(400).json({
-      ok: false
+      ok: false,
     })
   }
 }
 
-export const getUnicUser = async (req: Request, res: Response): Promise<void> => {
+export const getUserInvitations = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params
   try {
     const response = await user.findById(id)
     res.status(200).json({
       ok: true,
-      data: response
+      data: response?.invitations,
     })
   } catch (error) {
     console.log(error)
     res.status(400).json({
-      ok: false
+      ok: false,
     })
   }
 }
 
-export const createUser = async (req: Request, res: Response): Promise<void> => {
+export const createUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   let { email, username, password, image } = req.body
 
   if (image === '') {
-    image = 'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803554/Chat/profileImages/userDefaultImage_ci19ss.jpg'
+    image =
+      'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803554/Chat/profileImages/userDefaultImage_ci19ss.jpg'
   }
 
   const checkEmail = await user.findOne({ email })
@@ -55,7 +65,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
   if (checkEmail !== null) {
     res.status(400).json({
       ok: false,
-      msg: 'El correo ya esta en uso'
+      msg: 'El correo ya esta en uso',
     })
     return
   }
@@ -63,7 +73,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
   if (checkUsername !== null) {
     res.status(400).json({
       ok: false,
-      msg: 'El nombre de usuario ya esta en uso'
+      msg: 'El nombre de usuario ya esta en uso',
     })
     return
   }
@@ -86,30 +96,33 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
         username,
         image,
         groups: response?.groups,
-        token
-      }
+        token,
+      },
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Error en el servidor'
+      msg: 'Error en el servidor',
     })
   }
 }
 
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+export const deleteUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params
   try {
     await user.findByIdAndDelete(id)
     res.status(200).json({
       ok: true,
-      msg: 'El usuario se elimino con exito'
+      msg: 'El usuario se elimino con exito',
     })
   } catch (error) {
     console.log(error)
     res.status(400).json({
-      ok: false
+      ok: false,
     })
   }
 }
@@ -122,17 +135,20 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     if (emailValidation === null) {
       res.status(404).json({
         ok: false,
-        msg: 'El correo no existe'
+        msg: 'El correo no existe',
       })
       return
     }
     if (emailValidation?.password !== undefined) {
-      const passwordValidation: boolean = bcryptjs.compareSync(password, emailValidation?.password)
+      const passwordValidation: boolean = bcryptjs.compareSync(
+        password,
+        emailValidation?.password
+      )
 
       if (!passwordValidation) {
         res.status(404).json({
           ok: false,
-          msg: 'La contraseña es incorrecta'
+          msg: 'La contraseña es incorrecta',
         })
         return
       }
@@ -148,23 +164,22 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
         email,
         image: emailValidation?.image,
         username: emailValidation?.username,
-        groups: emailValidation?.groups
-      }
+        groups: emailValidation?.groups,
+      },
     })
   } catch (error) {
     console.log(error)
-    res.status(500).json(
-      {
-        ok: false,
-        msg: 'Error en el servidor'
-
-      }
-    )
+    res.status(500).json({
+      ok: false,
+      msg: 'Error en el servidor',
+    })
   }
 }
 
-export const renovarToken = async (req: Request,
-  res: Response): Promise<void> => {
+export const renovarToken = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { uid, email } = req
 
   if (uid !== undefined && email !== undefined) {
@@ -182,9 +197,8 @@ export const renovarToken = async (req: Request,
           username: userDB?.username,
           groups: userDB?.groups,
           invitations: userDB?.invitations,
-          token
-        }
-
+          token,
+        },
       })
     }
   }
@@ -199,7 +213,7 @@ export const editUser = async (req: Request, res: Response): Promise<void> => {
     if (usernameFind !== null) {
       res.status(400).json({
         ok: false,
-        msg: 'El nombre de usuario ya esta en uso'
+        msg: 'El nombre de usuario ya esta en uso',
       })
       return
     }
@@ -224,15 +238,15 @@ export const editUser = async (req: Request, res: Response): Promise<void> => {
       ok: true,
       data: {
         image: response?.image,
-        username: response?.username
+        username: response?.username,
       },
-      msg: 'Editado con exito'
+      msg: 'Editado con exito',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }

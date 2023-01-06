@@ -20,7 +20,7 @@
         (error)="imageError($event)"
       />
       <div *ngIf="userOptions" class="userOptions">
-        <h3>{{ user.username}}</h3>
+        <h3>{{ user.username }}</h3>
         <button (click)="editarPerfil()" class="editButton">
           Editar perfil
         </button>
@@ -32,6 +32,7 @@
   </div>
   <div class="createGroupForm" (click)="ventanaCrear()" *ngIf="ventana">
     <div class="createGroupFormCard" (click)="stopPropagation($event)">
+      <button class="closeCreateGroup" (click)="ventanaCrear()">X</button>
       <h1>Crear Grupo</h1>
       <form [formGroup]="groupForm" (ngSubmit)="crearGrupo()">
         <label>Nombre del Grupo</label>

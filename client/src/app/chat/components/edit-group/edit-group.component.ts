@@ -60,4 +60,8 @@ export class EditGroupComponent implements OnInit {
 
     return false;
   }
+
+  closeEditCard(): void {
+    this.editGroup.emit(false);
+  }
 }

@@ -1,10 +1,12 @@
 <div class="lobby">
   <app-sidebar></app-sidebar>
-  <app-notification></app-notification>
+  <app-notification
+    (actualizarInvitaciones)="actualizarInvitacion()"
+  ></app-notification>
 
   <div class="listOfInvitations">
     <h1>Invitaciones</h1>
-    <p *ngIf="invitations" class="invitationItem">Vacio . . .</p>
+    <p *ngIf="invitations.length === 0" class="invitationItem">Vacio . . .</p>
     <div *ngFor="let item of invitations" class="invitationItem">
       <p>
         El usuario {{ item.username }} te ha invitado a {{ item.groupName }}

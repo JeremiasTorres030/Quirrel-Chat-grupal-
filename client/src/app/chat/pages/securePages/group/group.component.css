@@ -131,6 +131,7 @@ app-chat-input {
 }
 
 app-notification,
-app-edit-group {
+app-edit-group,
+app-delete-group {
   position: absolute;
 }

@@ -2,7 +2,6 @@
   <div class="sidebar">
     <app-sidebar></app-sidebar>
   </div>
-
   <app-notification></app-notification>
   <app-edit-group
     *ngIf="editGroup"
@@ -43,6 +42,7 @@
   <app-members-bar
     [permisosDeAdmin]="permisosDeAdmin"
     [groupMembers]="groupMembers"
+    [gname]="gname"
   >
   </app-members-bar>
 </div>

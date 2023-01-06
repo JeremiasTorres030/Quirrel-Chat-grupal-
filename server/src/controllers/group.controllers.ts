@@ -1,69 +1,86 @@
 import { Request, Response } from 'express'
 import { group, user } from '../models/user.model'
-export const getAllGroups = async (_req: Request, res: Response): Promise<void> => {
+export const getAllGroups = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const response = await group.find()
 
     if (response !== null) {
       res.status(200).json({
         ok: true,
-        data: response
+        data: response,
       })
       return
     }
 
     res.status(404).json({
       ok: false,
-      msg: 'No se encontro ningun grupo'
+      msg: 'No se encontro ningun grupo',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const getUnicGroup = async (req: Request, res: Response): Promise<void> => {
+export const getUnicGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params
 
   try {
     const response = await group.findById(id)
 
     if (response !== null) {
-      const membersData = await Promise.all(response.members.map(async (users) => {
-        const userData = await user.findById(users.uid)
+      const membersData = await Promise.all(
+        response.members.map(async (users) => {
+          const userData = await user.findById(users.uid)
 
-        return { username: userData?.username, id: userData?.id, image: userData?.image, rol: users.rol }
-      }))
+          return {
+            username: userData?.username,
+            id: userData?.id,
+            image: userData?.image,
+            rol: users.rol,
+          }
+        })
+      )
 
       res.status(200).json({
         ok: true,
         groupData: response,
-        membersData
+        membersData,
       })
       return
     }
 
     res.status(404).json({
       ok: false,
-      msg: 'No se econtro ningun grupo'
+      msg: 'No se econtro ningun grupo',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const createGroup = async (req: Request, res: Response): Promise<void> => {
+export const createGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   let { groupname, image } = req.body
 
   if (image === '') {
-    image = 'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803197/Chat/groupImages/GroupImageDefault_bkwkek.jpg'
+    image =
+      'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803197/Chat/groupImages/GroupImageDefault_bkwkek.jpg'
   }
 
   try {
@@ -71,18 +88,21 @@ export const createGroup = async (req: Request, res: Response): Promise<void> =>
 
     res.status(200).json({
       ok: true,
-      data: response
+      data: response,
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const deleteGroup = async (req: Request, res: Response): Promise<void> => {
+export const deleteGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params
 
   try {
@@ -90,18 +110,21 @@ export const deleteGroup = async (req: Request, res: Response): Promise<void> =>
 
     res.status(200).json({
       ok: true,
-      msg: 'Grupo eliminado'
+      msg: 'Grupo eliminado',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const addMemberGroup = async (req: Request, res: Response): Promise<void> => {
+export const addMemberGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { uid, gid } = req.body
   try {
     const findGroup = await group.findById(gid)
@@ -114,52 +137,71 @@ export const addMemberGroup = async (req: Request, res: Response): Promise<void>
       }
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      findGroup.messages.push({ userID: findUser?.id, message: `${findUser?.username} se ha unido al grupo`, type: 'member' })
+      findGroup.messages.push({
+        userID: findUser?.id,
+        message: `${findUser?.username} se ha unido al grupo`,
+        type: 'member',
+      })
       findUser.groups.push(gid)
-      findUser.invitations = findUser.invitations.filter(inv => inv.groupID !== gid)
-      await group.findByIdAndUpdate(gid, { members: findGroup?.members, messages: findGroup?.messages }, { new: true })
-      await user.findByIdAndUpdate(uid, { groups: findUser?.groups, invitations: findUser?.invitations }, { new: true })
+      findUser.invitations = findUser.invitations.filter(
+        (inv) => inv.groupID !== gid
+      )
+      await group.findByIdAndUpdate(
+        gid,
+        { members: findGroup?.members, messages: findGroup?.messages },
+        { new: true }
+      )
+      await user.findByIdAndUpdate(
+        uid,
+        { groups: findUser?.groups, invitations: findUser?.invitations },
+        { new: true }
+      )
       res.status(200).json({
         ok: true,
         msg: 'Usuario agregado con exito',
-        data: { gid }
+        data: { gid },
       })
       return
     }
     res.status(404).json({
       ok: false,
-      msg: 'El grupo no se econtro'
+      msg: 'El grupo no se econtro',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const allUserGroup = async (req: Request, res: Response): Promise<void> => {
+export const allUserGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params
   try {
     const response = await user.findById(id)
 
     if (response !== null) {
-      const groupData = await Promise.all(response?.groups?.map(async (groupID) => {
-        return await group.findById(groupID)
-      }))
+      const groupData = await Promise.all(
+        response?.groups?.map(async (groupID) => {
+          return await group.findById(groupID)
+        })
+      )
 
       if (groupData.length !== 0) {
         res.status(200).json({
           ok: true,
-          groupData
+          groupData,
         })
         return
       }
 
       res.status(200).json({
         ok: true,
-        data: []
+        data: [],
       })
 
       return
@@ -167,18 +209,21 @@ export const allUserGroup = async (req: Request, res: Response): Promise<void> =
 
     res.status(404).json({
       ok: false,
-      msg: 'El usuario proveido no existe'
+      msg: 'El usuario proveido no existe',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const getMessagesGroup = async (req: Request, res: Response): Promise<void> => {
+export const getMessagesGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params
 
   try {
@@ -187,19 +232,22 @@ export const getMessagesGroup = async (req: Request, res: Response): Promise<voi
     if (response !== null) {
       res.status(200).json({
         ok: true,
-        messages: response.messages
+        messages: response.messages,
       })
     }
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const inviteMemberGroup = async (req: Request, res: Response): Promise<void> => {
+export const inviteMemberGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { gid, uid, inviteid } = req.body
 
   try {
@@ -208,24 +256,39 @@ export const inviteMemberGroup = async (req: Request, res: Response): Promise<vo
     const groupInvitation = await group.findById(gid)
 
     if (response !== null && userHost !== null && groupInvitation !== null) {
-      if (groupInvitation.members.find((userI) => {
-        return userI.uid === inviteid
-      }) !== undefined) {
+      if (
+        groupInvitation.members.find((userI) => {
+          return userI.uid === inviteid
+        }) !== undefined
+      ) {
         res.status(400).json({
           ok: false,
-          msg: 'El usuario ya esta en el grupo'
+          msg: 'El usuario ya esta en el grupo',
         })
         return
       }
 
-      response.invitations.push({ groupID: gid, username: userHost?.username, groupName: groupInvitation?.groupname })
+      response.invitations.push({
+        groupID: gid,
+        username: userHost?.username,
+        groupName: groupInvitation?.groupname,
+      })
 
-      await user.findByIdAndUpdate(inviteid, { invitations: response?.invitations }, { new: true })
+      await user.findByIdAndUpdate(
+        inviteid,
+        { invitations: response?.invitations },
+        { new: true }
+      )
 
       res.status(200).json({
         ok: true,
         msg: 'Invitacion enviada',
-        data: { groupID: gid, username: userHost?.username, groupName: groupInvitation?.groupname, userInvited: inviteid }
+        data: {
+          groupID: gid,
+          username: userHost?.username,
+          groupName: groupInvitation?.groupname,
+          userInvited: inviteid,
+        },
       })
 
       return
@@ -233,39 +296,44 @@ export const inviteMemberGroup = async (req: Request, res: Response): Promise<vo
 
     res.status(404).json({
       ok: false,
-      msg: 'Parece que algunos de los elementos no existen'
+      msg: 'Parece que algunos de los elementos no existen',
     })
   } catch (error) {
     console.log(error)
 
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
 
-export const deleteInvitationGroup = async (req: Request, res: Response): Promise<void> => {
+export const deleteInvitationGroup = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { uid, gid } = req.params
 
   try {
     const response = await user.findById(uid)
 
     if (response !== null) {
-      response.invitations = response.invitations.filter(inv => inv.groupID !== gid)
+      response.invitations = response.invitations.filter(
+        (inv) => inv.groupID !== gid
+      )
 
       await user.findByIdAndUpdate(uid, { invitations: response.invitations })
 
       res.status(200).json({
         ok: true,
-        msg: 'Invitacion rechazada con exito'
+        msg: 'Invitacion rechazada con exito',
       })
     }
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
@@ -279,17 +347,26 @@ export const exitGroup = async (req: Request, res: Response): Promise<void> => {
 
     if (findUser !== null && findGroup !== null) {
       findUser.groups = findUser?.groups.filter((groups) => groups !== gid)
-      findGroup.members = findGroup?.members.filter((members) => members.uid !== uid)
+      findGroup.members = findGroup?.members.filter(
+        (members) => members.uid !== uid
+      )
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      findGroup.messages.push({ message: `${findUser.username} ha salido del grupo`, type: 'member', userID: findUser.id })
+      findGroup.messages.push({
+        message: `${findUser.username} ha salido del grupo`,
+        type: 'member',
+        userID: findUser.id,
+      })
 
       await user.findByIdAndUpdate(uid, { groups: findUser?.groups })
-      await group.findByIdAndUpdate(gid, { members: findGroup?.members, messages: findGroup.messages })
+      await group.findByIdAndUpdate(gid, {
+        members: findGroup?.members,
+        messages: findGroup.messages,
+      })
 
       res.status(200).json({
         ok: true,
-        msg: 'El usuario salio con exito'
+        msg: 'El usuario salio con exito',
       })
 
       return
@@ -297,13 +374,13 @@ export const exitGroup = async (req: Request, res: Response): Promise<void> => {
 
     res.status(404).json({
       ok: false,
-      msg: 'El usuario o el grupo es inexistente'
+      msg: 'El usuario o el grupo es inexistente',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }
@@ -331,15 +408,15 @@ export const editGroup = async (req: Request, res: Response): Promise<void> => {
       ok: true,
       data: {
         image: response?.image,
-        groupname: response?.groupname
+        groupname: response?.groupname,
       },
-      msg: 'Editado con exito'
+      msg: 'Editado con exito',
     })
   } catch (error) {
     console.log(error)
     res.status(500).json({
       ok: false,
-      msg: 'Hubo un error en el servidor'
+      msg: 'Hubo un error en el servidor',
     })
   }
 }

@@ -1,26 +1,33 @@
-* {
-  font-family: "Noto Sans Display", sans-serif;
-}
-
-.loginComponent {
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
+.deleteGroupForm {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  background-color: rgb(58, 17, 139);
-  color: white;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.519);
+  z-index: 9999;
 }
 
-.loginComponent form {
+.deleteGroupFormCard {
+  width: fit-content;
+  height: fit-content;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+  background-color: rgb(97, 50, 190);
+  padding: 50px;
+  border-radius: 10px;
+  position: relative;
+}
+
+form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-.loginComponent form input {
+form input {
   width: 280px;
   padding: 5px;
   margin: 10px 0;
@@ -29,13 +36,13 @@
   box-shadow: 0px 0px 20px 1px rgb(19, 21, 49);
 }
 
-.loginComponent form input:focus {
+form input:focus {
   border: 5px rgb(93, 46, 186) solid;
   border-radius: 5px;
   outline: 0;
 }
 
-.loginComponent button {
+.deleteGroupFormCard button {
   cursor: pointer;
   font-weight: 400;
   font-size: 18px;
@@ -50,28 +57,14 @@
   transition: all 300ms;
 }
 
-.loginComponent button:hover {
+.deleteGroupFormCard button:hover {
   font-weight: 600;
   box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
 }
 
-.loginComponent button:disabled {
+.deleteGroupFormCard button:disabled {
   background-color: rgb(110, 99, 132);
   box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
-}
-
-.loginComponent h1 {
-  font-size: 60px;
-  margin: 20px 0;
-}
-
-.loginComponent a {
-  margin-top: 10px;
-  color: white;
-}
-
-.loginComponent a:hover {
-  color: rgb(218, 190, 249);
 }
 
 .error {
@@ -79,16 +72,10 @@
   margin-bottom: 5px;
 }
 
-.loginCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(80, 34, 150);
-  height: fit-content;
+.deleteGroupFormCard .cerrarDeleteGrupo {
   width: fit-content;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid rgba(54, 54, 54, 0.346);
-  box-shadow: 0 0 25px 3px black;
+  height: fit-content;
+  position: absolute;
+  top: 0;
+  right: 5px;
 }

@@ -1,15 +1,21 @@
-.editGroupForm {
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(88, 8, 208);
+}
+.listOfUsers {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.519);
   z-index: 9999;
 }
 
-.editGroupFormCard {
+.listOfUsersCard {
   width: fit-content;
   height: fit-content;
   z-index: 9999;
@@ -21,14 +27,13 @@
   position: relative;
 }
 
-form {
+.listOfUsersCard form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
-form input {
+.listOfUsers input {
   width: 280px;
   padding: 5px;
   margin: 10px 0;
@@ -37,13 +42,13 @@ form input {
   box-shadow: 0px 0px 20px 1px rgb(19, 21, 49);
 }
 
-form input:focus {
+.listOfUsers input:focus {
   border: 5px rgb(93, 46, 186) solid;
   border-radius: 5px;
   outline: 0;
 }
 
-.editGroupFormCard button {
+.listOfUsers button {
   cursor: pointer;
   font-weight: 400;
   font-size: 18px;
@@ -58,12 +63,12 @@ form input:focus {
   transition: all 300ms;
 }
 
-.editGroupFormCard button:hover {
+.listOfUsers button:hover {
   font-weight: 600;
   box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
 }
 
-.editGroupFormCard button:disabled {
+.listOfUsers button:disabled {
   background-color: rgb(110, 99, 132);
   box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
 }
@@ -73,10 +78,33 @@ form input:focus {
   margin-bottom: 5px;
 }
 
-.editGroupFormCard .cerrarEditarGrupo {
+.listOfinvitations {
+  background-color: rgb(136, 92, 223);
+  padding: 5px;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.listOfUsersCard .closeListOfUserCard {
   width: fit-content;
   height: fit-content;
   position: absolute;
-  top: 0;
+  top: 0px;
   right: 5px;
+}
+
+.memberCard {
+  display: flex;
+  background-color: rgb(54, 17, 129);
+  padding: 5px;
+  border-radius: 8px;
+  margin: 5px 0;
+  width: 250px;
+}
+
+.memberCard img {
+  width: 50px;
+  border-radius: 100%;
+  margin-right: 8px;
 }

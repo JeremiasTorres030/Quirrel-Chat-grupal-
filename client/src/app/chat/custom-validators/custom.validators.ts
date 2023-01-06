@@ -9,3 +9,13 @@ export const passwordValidator = (control: AbstractControl): null | {} => {
 
   return null;
 };
+
+export const deleteGroupValidator = (control: AbstractControl): null | {} => {
+  if (control.get('eliminar')?.value !== control.get('nombre')?.value) {
+    return {
+      notEqual: true,
+    };
+  }
+
+  return null;
+};

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { passwordValidator } from '../../custom-validators/password.validators';
+import { passwordValidator } from '../../custom-validators/custom.validators';
 import { UserService } from '../../services/user.service';
 
 @Component({

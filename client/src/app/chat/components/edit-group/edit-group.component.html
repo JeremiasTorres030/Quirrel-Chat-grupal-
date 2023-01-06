@@ -1,5 +1,6 @@
 <div class="editGroupForm">
   <div class="editGroupFormCard" (click)="stopPropagation($event)">
+    <button class="cerrarEditarGrupo" (click)="closeEditCard()">X</button>
     <h1>Editar grupo</h1>
     <form [formGroup]="editGroupForm" (ngSubmit)="submitEditGroup()">
       <label>Nombre del grupo</label>

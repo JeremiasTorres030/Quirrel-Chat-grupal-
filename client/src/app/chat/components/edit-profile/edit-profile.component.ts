@@ -51,4 +51,8 @@ export class EditProfileComponent {
 
     return false;
   }
+
+  closeEditProfile(): void {
+    this.editProfile.emit(false);
+  }
 }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GuardGuard } from './guard/guard.guard';
-import { InicioComponent } from './pages/inicio/inicio.component';
 import { LoginComponent } from './pages/login/login.component';
 import { GroupComponent } from './pages/securePages/group/group.component';
 import { LobbyComponent } from './pages/securePages/lobby/lobby.component';
@@ -11,10 +10,6 @@ const routes: Routes = [
   {
     path: '',
     children: [
-      {
-        path: 'inicio',
-        component: InicioComponent,
-      },
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignupComponent },
       {
@@ -28,7 +23,7 @@ const routes: Routes = [
       },
       {
         path: '**',
-        redirectTo: 'inicio',
+        redirectTo: 'login',
       },
     ],
   },

@@ -7,9 +7,9 @@ import {
   deleteUser,
   editUser,
   getAllUsers,
-  getUnicUser,
+  getUserInvitations,
   loginUser,
-  renovarToken
+  renovarToken,
 } from '../controllers/users.controllers'
 import { validarCampos } from '../middleware/validarCampos'
 import { verficarToken } from '../middleware/verificarToken'
@@ -18,7 +18,7 @@ export const router = Router()
 
 // users routes
 router.get('/api/user/all', getAllUsers)
-router.get('/api/user/:id', getUnicUser)
+router.get('/api/user/:id', getUserInvitations)
 router.post(
   '/api/user/new',
   [
@@ -27,7 +27,7 @@ router.post(
       .isString()
       .isLength({ min: 6 }),
     check('email', 'El email es obligatorio').isString().isEmail(),
-    validarCampos
+    validarCampos,
   ],
   createUser
 )
@@ -38,7 +38,7 @@ router.post(
     check('password', 'La contraseña es obligatoria')
       .isString()
       .isLength({ min: 6 }),
-    validarCampos
+    validarCampos,
   ],
   loginUser
 )

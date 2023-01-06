@@ -3,8 +3,9 @@
 }
 
 .signupComponent {
+  overflow: hidden;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,10 +33,6 @@
   border: 5px rgb(93, 46, 186) solid;
   border-radius: 5px;
   outline: 0;
-}
-
-.signupComponent form input:hover {
-  border: 3px rgb(93, 46, 186) solid;
 }
 
 .signupComponent button {
@@ -88,9 +85,9 @@
   justify-content: center;
   align-items: center;
   background-color: rgb(80, 34, 150);
-  height: 550px;
+  height: fit-content;
   width: fit-content;
-  padding: 30px;
+  padding: 20px;
   border-radius: 10px;
   border: 1px solid rgba(54, 54, 54, 0.346);
   box-shadow: 0 0 25px 3px black;
