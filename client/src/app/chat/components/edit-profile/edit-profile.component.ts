@@ -19,7 +19,7 @@ export class EditProfileComponent {
 
   @Output() public editProfile = new EventEmitter<boolean>();
 
-  stopPropagation(e: any): void {
+  stopPropagation(e: Event): void {
     e.stopPropagation();
   }
 

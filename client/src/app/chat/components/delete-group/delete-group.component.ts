@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { GroupMembers } from 'src/types';
 import { deleteGroupValidator } from '../../custom-validators/custom.validators';
 import { GroupService } from '../../services/group.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-delete-group',
@@ -10,8 +12,10 @@ import { GroupService } from '../../services/group.service';
   styleUrls: ['./delete-group.component.css'],
 })
 export class DeleteGroupComponent implements OnInit {
+  public socket = this.userService.socket;
   public gid!: string;
   @Input() gname!: string;
+  @Input() gmembers!: Array<GroupMembers>;
   @Output() cerrarEliminarGrupo = new EventEmitter<boolean>();
   public formularioParaEliminar: FormGroup = this.fb.group(
     {
@@ -26,7 +30,7 @@ export class DeleteGroupComponent implements OnInit {
     private fb: FormBuilder,
     private groupService: GroupService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +46,10 @@ export class DeleteGroupComponent implements OnInit {
     if (this.formularioParaEliminar.valid) {
       this.groupService.deleteGroup(this.gid).subscribe((res) => {
         if (res.ok) {
-          this.router.navigateByUrl('/user/lobby');
+          this.socket.emit(
+            'deleteGroup',
+            this.gmembers.map(({ uid }) => uid)
+          );
         }
       });
     }

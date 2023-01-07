@@ -2,6 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import {
+  AddMemberGroup,
+  DataApi,
+  DataApiAddMember,
+  DataApiEditGroup,
+  DataApiGetGroup,
+  DataApiMessages,
+  DataApiResponse,
+  DataApiSendInvitation,
+  DataApiUserGroups,
+  GroupFields,
+} from 'src/types';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -12,12 +24,12 @@ export class GroupService {
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
-  createGroup(group: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}group/new`, group).pipe(
+  createGroup(group: GroupFields): Observable<DataApi> {
+    return this.http.post<DataApi>(`${this.apiUrl}group/new`, group).pipe(
       tap((res) => {
         if (res.ok) {
           this.addMemberGroup({
-            uid: this.userService.user.id,
+            uid: this.userService.user.uid,
             gid: res.data._id,
           }).subscribe();
         }
@@ -25,43 +37,58 @@ export class GroupService {
     );
   }
 
-  getGroupMessages(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}group/messages/${id}`);
+  getGroupMessages(id: string): Observable<DataApiMessages> {
+    return this.http.get<DataApiMessages>(`${this.apiUrl}group/messages/${id}`);
   }
 
-  getAllUserGroups(): Observable<any> {
-    return this.http.get(
-      `${this.apiUrl}group/usergroup/${this.userService.user.id}`
+  getAllUserGroups(): Observable<DataApiUserGroups> {
+    return this.http.get<DataApiUserGroups>(
+      `${this.apiUrl}group/usergroup/${this.userService.user.uid}`
     );
   }
 
-  addMemberGroup(member: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}group/member/add`, member);
+  addMemberGroup(member: AddMemberGroup): Observable<DataApiAddMember> {
+    return this.http.post<DataApiAddMember>(
+      `${this.apiUrl}group/member/add`,
+      member
+    );
   }
 
-  sendInvitationGroup(member: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}group/member/invite`, member);
+  sendInvitationGroup(
+    member: AddMemberGroup
+  ): Observable<DataApiSendInvitation> {
+    return this.http.post<DataApiSendInvitation>(
+      `${this.apiUrl}group/member/invite`,
+      member
+    );
   }
 
-  deniedInvitationGroup(member: any): Observable<any> {
-    return this.http.delete(
+  deniedInvitationGroup(member: AddMemberGroup): Observable<DataApiResponse> {
+    return this.http.delete<DataApiResponse>(
       `${this.apiUrl}group/member/invite/denied/${member.uid}/${member.gid}`
     );
   }
 
-  getUnicGroup(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}group/${id}`);
+  getUnicGroup(id: string): Observable<DataApiGetGroup> {
+    return this.http.get<DataApiGetGroup>(`${this.apiUrl}group/${id}`);
   }
 
-  exitGroup(uid: string, gid: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}group/member/exit/${uid}/${gid}`);
+  exitGroup(uid: string, gid: string): Observable<DataApiResponse> {
+    return this.http.delete<DataApiResponse>(
+      `${this.apiUrl}group/member/exit/${uid}/${gid}`
+    );
   }
 
-  editGroup(gid: string, values: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}group/edit/${gid}`, values);
+  editGroup(gid: string, values: GroupFields): Observable<DataApiEditGroup> {
+    return this.http.put<DataApiEditGroup>(
+      `${this.apiUrl}group/edit/${gid}`,
+      values
+    );
   }
 
-  deleteGroup(gid: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}group/delete/${gid}`);
+  deleteGroup(gid: string): Observable<DataApiResponse> {
+    return this.http.delete<DataApiResponse>(
+      `${this.apiUrl}group/delete/${gid}`
+    );
   }
 }

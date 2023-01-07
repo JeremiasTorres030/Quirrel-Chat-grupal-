@@ -42,7 +42,7 @@ export class SignupComponent {
           next: (res) => {
             if (res.ok) {
               this.router.navigateByUrl('/user/lobby');
-              this.userService.socket.emit('userID', res.data.id);
+              this.userService.socket.emit('userID', res.data.uid);
             }
           },
 

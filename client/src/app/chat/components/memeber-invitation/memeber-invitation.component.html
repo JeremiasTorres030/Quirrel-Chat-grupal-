@@ -10,7 +10,7 @@
       <div *ngIf="showListOfMembers" class="listOfinvitations">
         <div
           *ngFor="let item of showListOfMembers"
-          (click)="seleccionarUsuario(item.id, item.username)"
+          (click)="seleccionarUsuario(item.uid, item.username)"
           class="memberCard"
         >
           <img [src]="item.image" alt="user" (error)="imageError($event)" />

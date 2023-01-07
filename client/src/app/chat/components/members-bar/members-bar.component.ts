@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GroupMembers } from 'src/types';
 import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 
@@ -9,11 +10,11 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./members-bar.component.css'],
 })
 export class MembersBarComponent implements OnInit {
-  @Input() groupMembers!: Array<any>;
+  @Input() groupMembers!: Array<GroupMembers>;
   @Input() permisosDeAdmin!: boolean;
   @Input() gname!: string;
 
-  public listOfMembers!: Array<any>;
+  public listOfMembers!: Array<GroupMembers>;
   public gid!: string;
 
   public mostrarInvitacion: boolean = false;
@@ -44,21 +45,24 @@ export class MembersBarComponent implements OnInit {
 
   salirDelGrupo(): void {
     this.groupService
-      .exitGroup(this.userService.user.id, this.gid)
+      .exitGroup(this.userService.user.uid, this.gid)
       .subscribe((res) => {
         if (res.ok) {
-          this.userServices.socket.emit('updateGroup');
+          this.userServices.socket.emit(
+            'updateGroup',
+            this.groupMembers.map(({ uid }) => uid)
+          );
           this.router.navigateByUrl('/user/lobby');
         }
       });
   }
 
-  imageError(event: any): void {
-    if (event.target.alt.includes('user')) {
-      event.target.src =
+  imageError(event: Event): void {
+    if ((event.target as HTMLImageElement).alt.includes('user')) {
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803554/Chat/profileImages/userDefaultImage_ci19ss.jpg';
     } else {
-      event.target.src =
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803197/Chat/groupImages/GroupImageDefault_bkwkek.jpg';
     }
   }

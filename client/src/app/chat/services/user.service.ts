@@ -3,20 +3,21 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { io } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
+import {
+  DataApiAllUsers,
+  DataApiUser,
+  DataApiUserEdit,
+  DataApiUserInvitations,
+  User,
+  UserEdit,
+} from 'src/types';
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private _socket = io('http://localhost:3000/');
+  private _socket = io(environment.socket);
   private apiUrl: string = environment.apiUrl;
-  public user!: {
-    id: string;
-    email: string;
-    username: string;
-    groups: Array<string>;
-    invitations: Array<string>;
-    image: string;
-  };
+  public user!: User;
 
   get socket() {
     return this._socket;
@@ -29,15 +30,14 @@ export class UserService {
     email: string;
     password: string;
     image: string;
-  }): Observable<any> {
-    return this.http.post(`${this.apiUrl}user/new`, user).pipe(
-      tap((res: any) => {
-        if (res.ok) {
+  }): Observable<DataApiUser> {
+    return this.http.post<DataApiUser>(`${this.apiUrl}user/new`, user).pipe(
+      tap((res) => {
+        if (res.ok && res.data.token) {
           localStorage.setItem('token', res.data.token);
-
           this.user = {
             email: res.data.email,
-            id: res.data.id,
+            uid: res.data.uid,
             username: res.data.username,
             groups: res.data.groups,
             invitations: res.data.invitations,
@@ -48,15 +48,14 @@ export class UserService {
     );
   }
 
-  login(user: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}user/login`, user).pipe(
-      tap((res: any) => {
-        if (res.ok) {
+  login(user: { email: string; password: string }): Observable<DataApiUser> {
+    return this.http.post<DataApiUser>(`${this.apiUrl}user/login`, user).pipe(
+      tap((res) => {
+        if (res.ok && res.data.token) {
           localStorage.setItem('token', res.data.token);
-
           this.user = {
             email: res.data.email,
-            id: res.data.id,
+            uid: res.data.uid,
             username: res.data.username,
             groups: res.data.groups,
             invitations: res.data.invitations,
@@ -72,42 +71,48 @@ export class UserService {
       'x-token',
       localStorage.getItem('token') || ''
     );
+    return this.http
+      .get<DataApiUser>(`${this.apiUrl}user/token/validate`, { headers })
+      .pipe(
+        tap((res) => {
+          if (res.ok && res.data.token) {
+            localStorage.setItem('token', res.data.token);
+            this.user = {
+              email: res.data.email,
+              uid: res.data.uid,
+              username: res.data.username,
+              groups: res.data.groups,
+              invitations: res.data.invitations,
+              image: res.data.image,
+            };
+            this.socket.emit('userID', res.data.uid);
+          }
+        }),
+        map((res) => res.ok),
+        catchError(() => of(false))
+      );
+  }
 
-    return this.http.get(`${this.apiUrl}user/token/validate`, { headers }).pipe(
-      tap((res: any) => {
-        if (res.ok) {
-          localStorage.setItem('token', res.data.token);
-          this.user = {
-            email: res.data.email,
-            id: res.data.id,
-            username: res.data.username,
-            groups: res.data.groups,
-            invitations: res.data.invitations,
-            image: res.data.image,
-          };
-          this.socket.emit('userID', res.data.id);
-        }
-      }),
-      map((res: any) => res.ok),
-      catchError(() => of(false))
+  editUser(data: UserEdit): Observable<DataApiUserEdit> {
+    return this.http.put<DataApiUserEdit>(
+      `${this.apiUrl}user/edit/${this.user.uid}`,
+      data
     );
   }
 
-  editUser(data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}user/edit/${this.user.id}`, data);
+  getUserInvitations(): Observable<DataApiUserInvitations> {
+    return this.http
+      .get<DataApiUserInvitations>(`${this.apiUrl}user/${this.user.uid}`)
+      .pipe(
+        tap((res) => {
+          if (res.ok) {
+            this.user.invitations = res.data;
+          }
+        })
+      );
   }
 
-  getUserInvitations(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}user/${this.user.id}`).pipe(
-      tap((res: any) => {
-        if (res.ok) {
-          this.user.invitations = res.data;
-        }
-      })
-    );
-  }
-
-  getAllusers(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}user/all`);
+  getAllusers(): Observable<DataApiAllUsers> {
+    return this.http.get<DataApiAllUsers>(`${this.apiUrl}user/all`);
   }
 }

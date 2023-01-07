@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { User, Groups } from 'src/types';
 import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 
@@ -15,9 +16,10 @@ export class SidebarComponent implements AfterViewInit, OnInit {
     image: [''],
   });
 
+  public socket = this.userService.socket;
   public ventana: boolean = false;
-  public user!: any;
-  public userGroups: Array<any> = [];
+  public user!: User;
+  public userGroups: Array<Groups> = [];
   public userOptions: boolean = false;
   public editProfile: boolean = false;
 
@@ -30,6 +32,17 @@ export class SidebarComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.user = this.userService.user;
+
+    this.userService.socket.on('deleteGroup', () => {
+      this.groupService.getAllUserGroups().subscribe((res) => {
+        if (res.ok) {
+          if (res.groupData !== undefined) {
+            this.userGroups = res.groupData;
+          }
+        }
+      });
+      this.router.navigateByUrl('/user/lobby');
+    });
   }
 
   ngAfterViewInit(): void {
@@ -57,7 +70,7 @@ export class SidebarComponent implements AfterViewInit, OnInit {
     }
   }
 
-  stopPropagation(e: any): void {
+  stopPropagation(e: Event): void {
     e.stopPropagation();
   }
 
@@ -70,7 +83,7 @@ export class SidebarComponent implements AfterViewInit, OnInit {
     this.userService.user = {
       email: '',
       groups: [],
-      id: '',
+      uid: '',
       image: '',
       invitations: [],
       username: '',
@@ -83,12 +96,12 @@ export class SidebarComponent implements AfterViewInit, OnInit {
     this.editProfile = !this.editProfile;
   }
 
-  imageError(event: any): void {
-    if (event.target.alt.includes('user')) {
-      event.target.src =
+  imageError(event: Event): void {
+    if ((event.target as HTMLImageElement).alt.includes('user')) {
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803554/Chat/profileImages/userDefaultImage_ci19ss.jpg';
     } else {
-      event.target.src =
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803197/Chat/groupImages/GroupImageDefault_bkwkek.jpg';
     }
   }

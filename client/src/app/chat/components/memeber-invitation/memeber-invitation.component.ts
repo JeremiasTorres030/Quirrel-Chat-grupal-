@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { GroupMembers } from 'src/types';
 import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 
@@ -15,8 +16,8 @@ export class MemeberInvitationComponent implements OnInit {
   public errorPersonalizado!: string;
   public gid!: string;
 
-  @Input() public listOfMembers!: Array<any>;
-  public showListOfMembers!: Array<any>;
+  @Input() public listOfMembers!: Array<GroupMembers>;
+  public showListOfMembers!: Array<GroupMembers>;
 
   public formularioDeInvitacion: FormGroup = this.fb.group({
     miembro: ['', [Validators.required]],
@@ -48,7 +49,7 @@ export class MemeberInvitationComponent implements OnInit {
     e.stopPropagation();
   }
 
-  seleccionarUsuario(id: string, username: string): void {
+  seleccionarUsuario(id: string, username: string | undefined): void {
     this.formularioDeInvitacion.get('miembro')?.setValue(username);
     this.formularioDeInvitacion.get('miembroID')?.setValue(id);
   }
@@ -57,7 +58,7 @@ export class MemeberInvitationComponent implements OnInit {
     const value = res.toLowerCase();
 
     const usersFounded = this.listOfMembers?.filter((user) => {
-      return user.username.toLowerCase().includes(value);
+      return user.username?.toLowerCase().includes(value);
     });
 
     this.showListOfMembers = usersFounded;
@@ -68,7 +69,7 @@ export class MemeberInvitationComponent implements OnInit {
       this.groupService
         .sendInvitationGroup({
           inviteid: this.formularioDeInvitacion.get('miembroID')?.value,
-          uid: this.userService.user.id,
+          uid: this.userService.user.uid,
           gid: this.gid,
         })
         .subscribe({
@@ -76,9 +77,9 @@ export class MemeberInvitationComponent implements OnInit {
             if (res.ok) {
               this.errorPersonalizado = 'Invitacion enviada';
               this.userService.socket.emit('invitation', {
-                user: res.data.username,
-                groupname: res.data.groupName,
-                gid: res.data.groupID,
+                user: res.data.user,
+                groupname: res.data.groupname,
+                gid: res.data.gid,
                 userInvited: res.data.userInvited,
               });
             }
@@ -90,12 +91,12 @@ export class MemeberInvitationComponent implements OnInit {
         });
     }
   }
-  imageError(event: any): void {
-    if (event.target.alt.includes('user')) {
-      event.target.src =
+  imageError(event: Event): void {
+    if ((event.target as HTMLImageElement).alt.includes('user')) {
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803554/Chat/profileImages/userDefaultImage_ci19ss.jpg';
     } else {
-      event.target.src =
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803197/Chat/groupImages/GroupImageDefault_bkwkek.jpg';
     }
   }

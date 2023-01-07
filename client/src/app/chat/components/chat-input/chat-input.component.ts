@@ -1,9 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '../../services/group.service';
 import { MessagesServices } from '../../services/messages.service';
 import { UserService } from '../../services/user.service';
+import { GroupMembers, GroupMessages } from '../../../../types';
 
 @Component({
   selector: 'app-chat-input',
@@ -14,13 +15,13 @@ export class ChatInputComponent implements OnInit {
   public messageForm: FormGroup = this.fb.group({
     message: ['', [Validators.required]],
     type: ['text', [Validators.required]],
-    uid: [this.userService.user.id, [Validators.required]],
+    uid: [this.userService.user.uid, [Validators.required]],
   });
 
-  @Output() messageEvent = new EventEmitter<any>();
+  @Output() messageEvent = new EventEmitter<Array<GroupMessages>>();
 
   public socket = this.userService.socket;
-
+  @Input() gmembers: Array<GroupMembers> = [];
   public id!: string;
   constructor(
     private messagesService: MessagesServices,
@@ -50,7 +51,10 @@ export class ChatInputComponent implements OnInit {
           next: (res) => {
             if (res.ok) {
               this.messageForm.get('message')?.reset('');
-              this.socket.emit('chat message');
+              this.socket.emit(
+                'chat message',
+                this.gmembers.map(({ uid }) => uid)
+              );
             }
           },
         });

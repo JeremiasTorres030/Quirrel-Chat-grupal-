@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InvitationData } from 'src/types';
 import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 
@@ -16,9 +17,9 @@ export class NotificationComponent implements OnInit {
     private routerActive: ActivatedRoute
   ) {}
   public activar: boolean = false;
-  public data!: any;
+  public data!: InvitationData;
   public gid!: string;
-  @Output() actualizarInvitaciones = new EventEmitter<any>();
+  @Output() actualizarInvitaciones = new EventEmitter<void>();
 
   ngOnInit(): void {
     this.routerActive.params.subscribe(({ id }) => {
@@ -30,7 +31,7 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  activarNotificacion(data: any): void {
+  activarNotificacion(data: InvitationData): void {
     this.activar = !this.activar;
     this.data = data;
   }
@@ -44,7 +45,14 @@ export class NotificationComponent implements OnInit {
       .subscribe((res) => {
         if (res.ok) {
           this.router.navigateByUrl(`/user/group/${res.data.gid}`);
-          this.userServices.socket.emit('updateGroup');
+          this.groupService.getUnicGroup(res.data.gid).subscribe((res) => {
+            if (res.ok) {
+              this.userServices.socket.emit(
+                'updateGroup',
+                res.groupData.members.map(({ uid }) => uid)
+              );
+            }
+          });
         }
       });
     this.activar = false;

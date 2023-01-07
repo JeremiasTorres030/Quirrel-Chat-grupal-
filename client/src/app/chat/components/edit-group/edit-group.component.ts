@@ -32,7 +32,7 @@ export class EditGroupComponent implements OnInit {
     private activatedRouter: ActivatedRoute
   ) {}
 
-  stopPropagation(e: any): void {
+  stopPropagation(e: Event): void {
     e.stopPropagation();
   }
 

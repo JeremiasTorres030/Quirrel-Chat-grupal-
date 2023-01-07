@@ -11,7 +11,7 @@ export const getAllUsers = async (
 
     if (response !== null) {
       const userData = response.map((user) => {
-        return { id: user.id, username: user.username, image: user.image }
+        return { uid: user.id, username: user.username, image: user.image }
       })
 
       res.status(200).json({
@@ -159,7 +159,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
       ok: true,
       data: {
-        id: emailValidation?.id,
+        uid: emailValidation?.id,
         token,
         email,
         image: emailValidation?.image,
@@ -191,7 +191,7 @@ export const renovarToken = async (
       res.json({
         ok: true,
         data: {
-          id: userDB?.id,
+          uid: userDB?.id,
           email,
           image: userDB?.image,
           username: userDB?.username,

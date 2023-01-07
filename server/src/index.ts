@@ -12,32 +12,53 @@ export const server = createServer(app)
 
 export const io = new Server(server, { cors: { origin: '*' } })
 
-let usersConnected: any[] = []
+let usersConnected: Array<{ userID: string; socketID: string }> = []
 
 io.on('connection', (client) => {
   client.on('userID', (userID) => {
-    if (usersConnected.find(user => user.userID === userID) === undefined) {
+    if (usersConnected.find((user) => user.userID === userID) === undefined) {
       usersConnected.push({ userID, socketID: client.id })
     }
   })
 
-  client.on('chat message', () => {
-    io.emit('chat message')
+  client.on('chat message', (uid: Array<string>) => {
+    uid.forEach((uid) => {
+      const user = usersConnected.find((user) => user.userID === uid)
+      if (user !== undefined) {
+        io.to(user.socketID).emit('chat message')
+      }
+    })
   })
 
   client.on('invitation', (data) => {
-    const user = usersConnected.find(user => user.userID === data.userInvited)
+    const user = usersConnected.find((user) => user.userID === data.userInvited)
     if (user !== undefined) {
       io.to(user.socketID).emit('invitationClient', data)
     }
   })
 
-  client.on('updateGroup', () => {
-    io.emit('updateGroup')
+  client.on('updateGroup', (uid: Array<string>) => {
+    uid.forEach((uid) => {
+      const user = usersConnected.find((user) => user.userID === uid)
+      if (user !== undefined) {
+        io.to(user.socketID).emit('updateGroup')
+      }
+    })
+  })
+
+  client.on('deleteGroup', (uid: Array<string>) => {
+    uid.forEach((uid) => {
+      const user = usersConnected.find((user) => user.userID === uid)
+      if (user !== undefined) {
+        io.to(user.socketID).emit('deleteGroup')
+      }
+    })
   })
 
   client.on('disconnect', () => {
-    usersConnected = usersConnected.filter(user => user.socketID !== client.id)
+    usersConnected = usersConnected.filter(
+      (user) => user.socketID !== client.id
+    )
   })
 })
 

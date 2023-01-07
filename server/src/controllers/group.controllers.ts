@@ -44,7 +44,7 @@ export const getUnicGroup = async (
 
           return {
             username: userData?.username,
-            id: userData?.id,
+            uid: userData?.id,
             image: userData?.image,
             rol: users.rol,
           }
@@ -103,10 +103,23 @@ export const deleteGroup = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params
+  const { gid } = req.params
 
   try {
-    await group.findByIdAndDelete(id)
+    const deleteGroup = await group.findByIdAndDelete(gid)
+
+    if (deleteGroup !== null) {
+      deleteGroup.members.forEach(async ({ uid }) => {
+        const findUsers = await user.findById(uid)
+        if (findUsers !== null) {
+          findUsers.groups = findUsers?.groups.filter((group) => group !== gid)
+          await user.findByIdAndUpdate(findUsers.id, {
+            groups: findUsers.groups,
+          })
+        }
+        return
+      })
+    }
 
     res.status(200).json({
       ok: true,
@@ -161,6 +174,7 @@ export const addMemberGroup = async (
         msg: 'Usuario agregado con exito',
         data: { gid },
       })
+
       return
     }
     res.status(404).json({
@@ -181,6 +195,7 @@ export const allUserGroup = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params
+
   try {
     const response = await user.findById(id)
 
@@ -196,6 +211,7 @@ export const allUserGroup = async (
           ok: true,
           groupData,
         })
+
         return
       }
 
@@ -257,8 +273,8 @@ export const inviteMemberGroup = async (
 
     if (response !== null && userHost !== null && groupInvitation !== null) {
       if (
-        groupInvitation.members.find((userI) => {
-          return userI.uid === inviteid
+        groupInvitation.members.find((user) => {
+          return user.uid === inviteid
         }) !== undefined
       ) {
         res.status(400).json({
@@ -284,9 +300,9 @@ export const inviteMemberGroup = async (
         ok: true,
         msg: 'Invitacion enviada',
         data: {
-          groupID: gid,
-          username: userHost?.username,
-          groupName: groupInvitation?.groupname,
+          gid,
+          user: userHost?.username,
+          groupname: groupInvitation?.groupname,
           userInvited: inviteid,
         },
       })

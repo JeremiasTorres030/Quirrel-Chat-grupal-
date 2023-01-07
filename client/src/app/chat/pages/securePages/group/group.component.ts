@@ -2,6 +2,7 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from 'src/app/chat/services/group.service';
 import { UserService } from 'src/app/chat/services/user.service';
+import { GroupMembers, GroupMembersMessages, GroupMessages } from 'src/types';
 
 @Component({
   selector: 'app-group',
@@ -9,8 +10,8 @@ import { UserService } from 'src/app/chat/services/user.service';
   styleUrls: ['./group.component.css'],
 })
 export class GroupComponent implements OnInit, AfterViewChecked {
-  public groupMessage!: Array<any>;
-  public groupMembers!: Array<any>;
+  public groupMessage!: Array<GroupMessages | GroupMembersMessages>;
+  public groupMembers!: Array<GroupMembers>;
   public user: string = this.userService.user.username;
   public gid!: string;
   public gname!: string;
@@ -38,7 +39,7 @@ export class GroupComponent implements OnInit, AfterViewChecked {
   }
 
   actualizarGrupo(): void {
-    this.groupService.getUnicGroup(this.gid).subscribe((res: any) => {
+    this.groupService.getUnicGroup(this.gid).subscribe((res) => {
       if (res.ok) {
         this.gname = res.groupData.groupname;
         this.rellenarMensajes(res.groupData.messages, res.membersData);
@@ -46,50 +47,57 @@ export class GroupComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  actualizarMensajes(event: any): void {
+  actualizarMensajes(event: Array<GroupMessages>): void {
     this.rellenarMensajes(event, this.groupMembers);
   }
 
-  rellenarMensajes = (messages: Array<any>, mebmers: Array<any>): void => {
-    let arrayDATA: Array<any> = [];
+  rellenarMensajes = (
+    messages: Array<GroupMessages>,
+    members: Array<GroupMembers>
+  ): void => {
+    let arrayDATA: Array<GroupMembersMessages> = [];
 
     messages.forEach(({ userID, message, type }) => {
-      const userdata = mebmers.find((element) => {
-        return element.id === userID;
+      const userdata = members.find((element) => {
+        return element.uid === userID;
       });
 
-      arrayDATA.push({ ...userdata, message, type });
+      if (userdata?.uid) {
+        arrayDATA.push({ ...userdata, message, type });
+      }
     });
 
     this.groupMessage = arrayDATA;
-    this.groupMembers = mebmers;
+    this.groupMembers = members;
 
     this.admin();
   };
 
-  moverScroll() {
+  moverScroll(): void {
     document.getElementById('chat')?.scrollTo(0, 10000);
   }
 
-  imageError(event: any): void {
-    if (event.target.alt.includes('user')) {
-      event.target.src =
+  imageError(event: Event): void {
+    if ((event.target as HTMLImageElement).alt.includes('user')) {
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803554/Chat/profileImages/userDefaultImage_ci19ss.jpg';
     } else {
-      event.target.src =
+      (event.target as HTMLImageElement).src =
         'https://res.cloudinary.com/drifqbdtu/image/upload/v1663803197/Chat/groupImages/GroupImageDefault_bkwkek.jpg';
     }
   }
 
   admin(): void {
-    const user = this.groupMembers.find((user) => {
-      return user.id === this.userService.user.id;
-    });
+    const user = this.groupMembers.find(
+      (user) => user.uid === this.userService.user.uid
+    );
 
-    if (user.rol === 'admin') {
-      this.permisosDeAdmin = true;
-    } else {
-      this.permisosDeAdmin = false;
+    if (user !== undefined) {
+      if (user.rol === 'admin') {
+        this.permisosDeAdmin = true;
+      } else {
+        this.permisosDeAdmin = false;
+      }
     }
   }
 

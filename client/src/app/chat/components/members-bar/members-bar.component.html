@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="exitGroup">
+    <div class="exitGroup" *ngIf="!permisosDeAdmin">
       <button (click)="salirDelGrupo()">-</button>
       <h3>Salir del grupo</h3>
     </div>
@@ -33,6 +33,7 @@
   <app-delete-group
     *ngIf="mostrarEliminarGrupo"
     [gname]="gname"
+    [gmembers]="groupMembers"
     (cerrarEliminarGrupo)="eliminarGrupo()"
   ></app-delete-group>
 </div>

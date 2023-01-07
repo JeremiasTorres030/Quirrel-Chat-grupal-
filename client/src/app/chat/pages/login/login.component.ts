@@ -30,7 +30,7 @@ export class LoginComponent {
           if (res.ok) {
             this.groupService.getAllUserGroups().subscribe();
             this.router.navigateByUrl('/user/lobby');
-            this.userService.socket.emit('userID', res.data.id);
+            this.userService.socket.emit('userID', res.data.uid);
           }
         },
         error: (error) => {
