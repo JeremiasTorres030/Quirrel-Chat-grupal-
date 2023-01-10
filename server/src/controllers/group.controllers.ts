@@ -151,7 +151,7 @@ export const addMemberGroup = async (
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       findGroup.messages.push({
-        userID: findUser?.id,
+        uid: findUser?.id,
         message: `${findUser?.username} se ha unido al grupo`,
         type: 'member',
       })
@@ -371,7 +371,7 @@ export const exitGroup = async (req: Request, res: Response): Promise<void> => {
       findGroup.messages.push({
         message: `${findUser.username} ha salido del grupo`,
         type: 'member',
-        userID: findUser.id,
+        uid: findUser.id,
       })
 
       await user.findByIdAndUpdate(uid, { groups: findUser?.groups })

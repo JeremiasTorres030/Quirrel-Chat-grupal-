@@ -1,7 +1,7 @@
 export interface GroupMessages {
   image?: string;
   username?: string;
-  userID: string;
+  uid: string;
   message: string;
   type: string;
 }
@@ -17,7 +17,7 @@ export interface User {
   uid: string;
   email: string;
   username: string;
-  groups: Array<string>;
+  groups: Array<Groups>;
   invitations: Array<Invivtations>;
   image: string;
   token?: string;

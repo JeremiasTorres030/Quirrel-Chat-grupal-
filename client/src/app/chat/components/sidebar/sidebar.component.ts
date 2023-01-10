@@ -33,6 +33,16 @@ export class SidebarComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.user = this.userService.user;
 
+    this.userService.socket.on('editGroup', () => {
+      this.groupService.getAllUserGroups().subscribe((res) => {
+        if (res.ok) {
+          if (res.groupData !== undefined) {
+            this.userGroups = res.groupData;
+          }
+        }
+      });
+    });
+
     this.userService.socket.on('deleteGroup', () => {
       this.groupService.getAllUserGroups().subscribe((res) => {
         if (res.ok) {
@@ -41,6 +51,7 @@ export class SidebarComponent implements AfterViewInit, OnInit {
           }
         }
       });
+
       this.router.navigateByUrl('/user/lobby');
     });
   }

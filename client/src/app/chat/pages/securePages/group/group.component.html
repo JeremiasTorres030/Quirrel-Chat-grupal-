@@ -5,8 +5,9 @@
   <app-notification></app-notification>
   <app-edit-group
     *ngIf="editGroup"
-    (editGroup)="editGroupSucces()"
+    (editGroup)="editGroupButton()"
     (click)="editGroupButton()"
+    [gmembers]="groupMembers"
   ></app-edit-group>
 
   <div class="chat" id="chat">
@@ -21,7 +22,7 @@
       *ngFor="let message of groupMessage"
       class="message"
       [ngClass]="{
-        tumensaje: message.username === user,
+        tumensaje: message.uid === user,
         memberJoin: message.type === 'member'
       }"
     >

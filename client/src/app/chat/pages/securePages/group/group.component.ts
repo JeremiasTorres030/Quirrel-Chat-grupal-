@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GroupService } from 'src/app/chat/services/group.service';
 import { UserService } from 'src/app/chat/services/user.service';
 import { GroupMembers, GroupMembersMessages, GroupMessages } from 'src/types';
@@ -12,7 +12,7 @@ import { GroupMembers, GroupMembersMessages, GroupMessages } from 'src/types';
 export class GroupComponent implements OnInit, AfterViewChecked {
   public groupMessage!: Array<GroupMessages | GroupMembersMessages>;
   public groupMembers!: Array<GroupMembers>;
-  public user: string = this.userService.user.username;
+  public user: string = this.userService.user.uid;
   public gid!: string;
   public gname!: string;
   public permisosDeAdmin: boolean = false;
@@ -20,7 +20,8 @@ export class GroupComponent implements OnInit, AfterViewChecked {
   constructor(
     private groupService: GroupService,
     private userService: UserService,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private router: Router
   ) {}
   ngAfterViewChecked(): void {
     this.moverScroll();
@@ -36,14 +37,24 @@ export class GroupComponent implements OnInit, AfterViewChecked {
       this.actualizarGrupo();
       this.moverScroll();
     });
+
+    this.userService.socket.on('editGroup', () => {
+      this.actualizarGrupo();
+    });
   }
 
   actualizarGrupo(): void {
-    this.groupService.getUnicGroup(this.gid).subscribe((res) => {
-      if (res.ok) {
-        this.gname = res.groupData.groupname;
-        this.rellenarMensajes(res.groupData.messages, res.membersData);
-      }
+    this.groupService.getUnicGroup(this.gid).subscribe({
+      next: (res) => {
+        if (res.ok) {
+          this.gname = res.groupData.groupname;
+          this.rellenarMensajes(res.groupData.messages, res.membersData);
+        }
+      },
+      error: () => {
+        console.log(this.gid);
+        this.router.navigateByUrl('/user/lobby');
+      },
     });
   }
 
@@ -57,9 +68,9 @@ export class GroupComponent implements OnInit, AfterViewChecked {
   ): void => {
     let arrayDATA: Array<GroupMembersMessages> = [];
 
-    messages.forEach(({ userID, message, type }) => {
+    messages.forEach(({ uid, message, type }) => {
       const userdata = members.find((element) => {
-        return element.uid === userID;
+        return element.uid === uid;
       });
 
       if (userdata?.uid) {
@@ -99,11 +110,6 @@ export class GroupComponent implements OnInit, AfterViewChecked {
         this.permisosDeAdmin = false;
       }
     }
-  }
-
-  editGroupSucces(): void {
-    this.editGroup = !this.editGroup;
-    this.actualizarGrupo();
   }
 
   editGroupButton(): void {

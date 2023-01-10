@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Groups } from 'src/types';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -16,8 +17,10 @@ export class EditProfileComponent {
   });
 
   public customError!: string;
+  public socket = this.userService.socket;
 
   @Output() public editProfile = new EventEmitter<boolean>();
+  @Input() groups: Array<Groups> = [];
 
   stopPropagation(e: Event): void {
     e.stopPropagation();
@@ -33,6 +36,12 @@ export class EditProfileComponent {
           this.customError = res.msg;
 
           this.editProfile.emit(false);
+          this.groups.map(({ members }) => {
+            this.socket.emit(
+              'updateGroup',
+              members.map(({ uid }) => uid)
+            );
+          });
         }
       },
       error: (error) => {

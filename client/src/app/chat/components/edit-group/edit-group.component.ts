@@ -1,7 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { GroupMembers } from 'src/types';
 import { GroupService } from '../../services/group.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-edit-group',
@@ -15,6 +17,8 @@ export class EditGroupComponent implements OnInit {
   });
 
   public gid!: string;
+  public socket = this.userService.socket;
+  @Input() gmembers: Array<GroupMembers> = [];
 
   public customError!: string;
 
@@ -29,7 +33,8 @@ export class EditGroupComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private groupService: GroupService,
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private userService: UserService
   ) {}
 
   stopPropagation(e: Event): void {
@@ -41,7 +46,11 @@ export class EditGroupComponent implements OnInit {
       next: (res) => {
         if (res.ok) {
           this.customError = res.msg;
-          this.editGroup.emit(false);
+          this.editGroup.emit();
+          this.socket.emit(
+            'editGroup',
+            this.gmembers.map(({ uid }) => uid)
+          );
         }
       },
       error: (error) => {

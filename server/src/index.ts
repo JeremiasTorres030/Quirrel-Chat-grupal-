@@ -46,6 +46,15 @@ io.on('connection', (client) => {
     })
   })
 
+  client.on('editGroup', (uid: Array<string>) => {
+    uid.forEach((uid) => {
+      const user = usersConnected.find((user) => user.userID === uid)
+      if (user !== undefined) {
+        io.to(user.socketID).emit('editGroup')
+      }
+    })
+  })
+
   client.on('deleteGroup', (uid: Array<string>) => {
     uid.forEach((uid) => {
       const user = usersConnected.find((user) => user.userID === uid)
