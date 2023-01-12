@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { user } from '../models/user.model'
-import bcryptjs from 'bcryptjs'
+import { genSaltSync, hashSync, compareSync } from 'bcryptjs'
 import { jwtGenerator } from '../helpers/jwtGenerator'
 export const getAllUsers = async (
   _req: Request,
@@ -82,8 +82,8 @@ export const createUser = async (
   }
 
   try {
-    const salt: string = bcryptjs.genSaltSync(10)
-    password = bcryptjs.hashSync(password, salt)
+    const salt: string = genSaltSync(10)
+    password = hashSync(password, salt)
     const response = await user.create({ email, username, password, image })
     const token = await jwtGenerator(email, response.id)
 
@@ -146,7 +146,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return
     }
     if (emailValidation?.password !== undefined) {
-      const passwordValidation: boolean = bcryptjs.compareSync(
+      const passwordValidation: boolean = compareSync(
         password,
         emailValidation?.password
       )

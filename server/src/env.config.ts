@@ -1,6 +1,6 @@
-import dotenv from 'dotenv'
+import { config } from 'dotenv'
 
-dotenv.config()
+config()
 
 export const SECRET_JWT_SEED = (): string => {
   if (process.env.SECRET_JWT_SEED !== undefined) {
