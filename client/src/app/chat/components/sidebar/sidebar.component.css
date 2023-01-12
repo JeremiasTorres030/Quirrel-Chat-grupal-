@@ -55,7 +55,7 @@ h3 {
 
 .user {
   position: absolute;
-  bottom: 30px;
+  bottom: 0;
 }
 
 .user .userOptions {
@@ -64,7 +64,7 @@ h3 {
   flex-direction: column;
   position: absolute;
   left: 85px;
-  bottom: -20px;
+  bottom: 0px;
   margin: auto 5px;
   z-index: 9999;
   background-color: rgb(97, 50, 190);
@@ -102,7 +102,7 @@ h3 {
   border-radius: 40px;
   padding: 10px 5px;
   overflow: scroll;
-  height: 50vh;
+  height: 47vh;
   width: 80%;
 }
 

@@ -72,7 +72,7 @@ form input:focus {
   margin-bottom: 5px;
 }
 
-.deleteGroupFormCard .cerrarDeleteGrupo {
+.deleteGroupFormCard .closeDeleteGrupo {
   width: fit-content;
   height: fit-content;
   position: absolute;

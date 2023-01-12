@@ -32,6 +32,8 @@ export class ChatInputComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.socket.off('chat message');
+
     this.activeRoute.params.subscribe(({ id }) => {
       this.id = id;
     });

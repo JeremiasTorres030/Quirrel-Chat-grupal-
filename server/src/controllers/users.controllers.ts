@@ -36,10 +36,13 @@ export const getUserInvitations = async (
   const { id } = req.params
   try {
     const response = await user.findById(id)
-    res.status(200).json({
-      ok: true,
-      data: response?.invitations,
-    })
+    if (response !== null) {
+      res.status(200).json({
+        ok: true,
+        data: response?.invitations,
+      })
+      return
+    }
   } catch (error) {
     console.log(error)
     res.status(400).json({
@@ -80,25 +83,25 @@ export const createUser = async (
 
   try {
     const salt: string = bcryptjs.genSaltSync(10)
-
     password = bcryptjs.hashSync(password, salt)
-
     const response = await user.create({ email, username, password, image })
-
     const token = await jwtGenerator(email, response.id)
 
-    res.status(200).json({
-      ok: true,
-      msg: 'Creado con exito',
-      data: {
-        id: response?.id,
-        email,
-        username,
-        image,
-        groups: response?.groups,
-        token,
-      },
-    })
+    if (response !== null && token !== undefined) {
+      res.status(200).json({
+        ok: true,
+        msg: 'Creado con exito',
+        data: {
+          id: response?.id,
+          email,
+          username,
+          image,
+          groups: response?.groups,
+          token,
+        },
+      })
+      return
+    }
   } catch (error) {
     console.log(error)
     res.status(500).json({
@@ -114,11 +117,14 @@ export const deleteUser = async (
 ): Promise<void> => {
   const { id } = req.params
   try {
-    await user.findByIdAndDelete(id)
-    res.status(200).json({
-      ok: true,
-      msg: 'El usuario se elimino con exito',
-    })
+    const response = await user.findByIdAndDelete(id)
+    if (response !== null) {
+      res.status(200).json({
+        ok: true,
+        msg: 'El usuario se elimino con exito',
+      })
+      return
+    }
   } catch (error) {
     console.log(error)
     res.status(400).json({
@@ -234,14 +240,17 @@ export const editUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const response = await user.findByIdAndUpdate(id, data, { new: true })
 
-    res.status(200).json({
-      ok: true,
-      data: {
-        image: response?.image,
-        username: response?.username,
-      },
-      msg: 'Editado con exito',
-    })
+    if (response !== null) {
+      res.status(200).json({
+        ok: true,
+        data: {
+          image: response?.image,
+          username: response?.username,
+        },
+        msg: 'Editado con exito',
+      })
+      return
+    }
   } catch (error) {
     console.log(error)
     res.status(500).json({

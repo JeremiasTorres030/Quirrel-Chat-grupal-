@@ -19,14 +19,14 @@
 
 .chat {
   color: white;
-  width: 85%;
+  width: 100%;
   background-color: rgb(57, 21, 110);
   height: 100%;
-  overflow: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
+  position: relative;
 }
 
-app-members-bar {
+.membersBar {
   color: white;
   background-color: rgb(58, 17, 139);
   width: 20%;
@@ -60,7 +60,7 @@ app-members-bar {
   margin-left: 5px;
 }
 
-.tumensaje {
+.yourMessage {
   flex-direction: row-reverse;
   text-align: right;
   margin-left: auto;
@@ -84,54 +84,100 @@ app-members-bar {
 }
 
 app-chat-input {
-  position: absolute;
+  position: sticky;
   bottom: 0;
-  width: 73%;
+  width: 100%;
   z-index: 0;
 }
 
-.titulo {
+.title {
   position: sticky;
   padding: 5px;
   top: 0;
   background-color: rgb(68, 21, 162);
   border-radius: 5px;
   z-index: 0;
+  width: 100%;
+}
+
+.title .titleAndButton {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: auto;
 }
 
-.titulo h1 {
+.title .titleAndButton h1 {
   margin: 0;
 }
 
-.titulo button {
+.title .titleButtons {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.title .titleButtons button {
   cursor: pointer;
   font-weight: 400;
   font-size: 15px;
-  width: 80px;
+  width: fit-content;
   height: 50px;
   color: white;
-  border-radius: 8px;
   border: 0;
   box-shadow: 0px 0px 20px 1px rgb(12, 15, 46);
   background-color: rgb(32, 36, 70);
   margin: 0 15px;
   transition: all 300ms;
+  border-radius: 100%;
 }
 
-.titulo button:hover {
+.title .titleButtons button:hover {
   font-weight: 600;
   box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
-}
-
-.padding {
-  height: 60px;
 }
 
 app-notification,
 app-edit-group,
 app-delete-group {
   position: absolute;
+}
+
+.messages {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+}
+
+.padding {
+  height: 100px;
+}
+
+.membersBarFull {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.membersBarFull button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 18px;
+  width: 50px;
+  height: 50px;
+  color: white;
+  border-radius: 100%;
+  margin-right: 5px;
+  border: 0;
+  box-shadow: 0px 0px 20px 1px rgb(12, 15, 46);
+  background-color: rgb(32, 36, 70);
+  transition: all 300ms;
+}
+
+.membersBarFull button:hover {
+  font-weight: 600;
+  box-shadow: 0px 0px 20px 5px rgb(7, 11, 50);
 }

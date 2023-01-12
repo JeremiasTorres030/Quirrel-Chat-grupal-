@@ -1,7 +1,4 @@
 <div class="groupComponent">
-  <div class="sidebar">
-    <app-sidebar></app-sidebar>
-  </div>
   <app-notification></app-notification>
   <app-edit-group
     *ngIf="editGroup"
@@ -9,42 +6,70 @@
     (click)="editGroupButton()"
     [gmembers]="groupMembers"
   ></app-edit-group>
-
-  <div class="chat" id="chat">
-    <div class="titulo">
-      <h1>{{ gname }}</h1>
-      <button *ngIf="permisosDeAdmin" (click)="editGroupButton()">
-        Editar grupo
-      </button>
-    </div>
-
-    <div
-      *ngFor="let message of groupMessage"
-      class="message"
-      [ngClass]="{
-        tumensaje: message.uid === user,
-        memberJoin: message.type === 'member'
-      }"
-    >
-      <img [src]="message.image" alt="userImage" (error)="imageError($event)" />
-      <div>
-        <h4>{{ message.username | usernameNotFound }}</h4>
-        <p>{{ message.message }}</p>
+  <div class="sidebar" *ngIf="hideSideBar">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="chat">
+    <div class="title">
+      <div class="titleButtons">
+        <button
+          class="sideBarButton"
+          *ngIf="!smallScreen"
+          (click)="hideSideBarButton()"
+        >
+          Grupos
+        </button>
+        <div class="titleAndButton">
+          <h1>{{ gname | titlecase }}</h1>
+          <button *ngIf="adminRole" (click)="editGroupButton()">Editar</button>
+        </div>
+        <button
+          class="membersBarButton"
+          *ngIf="!smallScreen"
+          (click)="hideMemberBarButton()"
+        >
+          Miembros
+        </button>
       </div>
     </div>
-
-    <div class="padding"></div>
+    <div class="messages" id="chat">
+      <div
+        *ngFor="let message of groupMessage"
+        class="message"
+        [ngClass]="{
+          yourMessage: message.uid === user,
+          memberJoin: message.type === 'member'
+        }"
+      >
+        <img
+          [src]="message.image"
+          alt="userImage"
+          (error)="imageError($event)"
+        />
+        <div>
+          <h4>{{ message.username | usernameNotFound }}</h4>
+          <p>{{ message.message }}</p>
+        </div>
+      </div>
+      <div class="padding"></div>
+    </div>
 
     <app-chat-input
-      (messageEvent)="actualizarMensajes($event)"
+      (messageEvent)="updateMessages($event)"
       [gmembers]="groupMembers"
     ></app-chat-input>
   </div>
-
-  <app-members-bar
-    [permisosDeAdmin]="permisosDeAdmin"
-    [groupMembers]="groupMembers"
-    [gname]="gname"
+  <div
+    class="membersBar"
+    [ngClass]="{ membersBarFull: !smallScreen }"
+    *ngIf="hideMembersBar"
   >
-  </app-members-bar>
+    <button *ngIf="!smallScreen" (click)="hideMemberBarButton()">X</button>
+    <app-members-bar
+      [adminRole]="adminRole"
+      [groupMembers]="groupMembers"
+      [gname]="gname"
+    >
+    </app-members-bar>
+  </div>
 </div>

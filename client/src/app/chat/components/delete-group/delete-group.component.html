@@ -1,21 +1,15 @@
-<div class="deleteGroupForm" (click)="activarEliminarGrupo()">
+<div class="deleteGroupForm" (click)="activateDeleteGroup()">
   <div class="deleteGroupFormCard" (click)="stopPropagation($event)">
-    <button class="cerrarDeleteGrupo" (click)="activarEliminarGrupo()">
-      X
-    </button>
+    <button class="closeDeleteGrupo" (click)="activateDeleteGroup()">X</button>
     <h1>Eliminar grupo</h1>
-    <form [formGroup]="formularioParaEliminar">
+    <form [formGroup]="deleteGroupForm" (ngSubmit)="deleteGroup()">
       <label class="error">Ingrese el nombre del grupo "{{ gname }}"</label>
       <input
         type="text"
-        formControlName="eliminar"
+        formControlName="delete"
         placeholder="Nombre del grupo"
       />
-      <button
-        [disabled]="formularioParaEliminar.invalid"
-        type="submit"
-        (click)="eliminarGrupo()"
-      >
+      <button [disabled]="deleteGroupForm.invalid" type="submit">
         Eliminar
       </button>
     </form>

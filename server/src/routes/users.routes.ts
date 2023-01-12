@@ -23,9 +23,7 @@ router.post(
   '/api/user/new',
   [
     check('username', 'El nombre de usuario es obligatorio').isString(),
-    check('password', 'La contraseña es obligatoria')
-      .isString()
-      .isLength({ min: 6 }),
+    check('password', 'La contraseña es obligatoria').isString(),
     check('email', 'El email es obligatorio').isString().isEmail(),
     validarCampos,
   ],

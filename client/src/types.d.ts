@@ -1,7 +1,7 @@
 export interface GroupMessages {
   image?: string;
   username?: string;
-  uid: string;
+  uid?: string;
   message: string;
   type: string;
 }
@@ -95,7 +95,6 @@ export interface DataApiGetGroup {
 
 export interface DataApiEditGroup {
   ok: boolean;
-  data: GroupFields;
   msg: string;
 }
 
@@ -124,9 +123,4 @@ export interface DataApiUserInvitations {
 export interface DataApiAllUsers {
   ok: boolean;
   data: Array<{ uid: string; username: string; image: string; rol: string }>;
-}
-
-export interface GroupMembersMessages extends GroupMembers {
-  message: string;
-  type: string;
 }

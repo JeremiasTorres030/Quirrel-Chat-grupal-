@@ -1,9 +1,7 @@
 <div class="signupComponent">
   <div class="signupCard">
     <h1>Registrarse</h1>
-    <label class="error" *ngIf="errorPersonalizado">{{
-      errorPersonalizado
-    }}</label>
+    <label class="error" *ngIf="customError">{{ customError }}</label>
     <form [formGroup]="signUpForm" autocomplete="off" (ngSubmit)="signup()">
       <label>Nombre de usuario</label>
       <input

@@ -18,9 +18,8 @@ export class EditProfileComponent {
 
   public customError!: string;
   public socket = this.userService.socket;
-
   @Output() public editProfile = new EventEmitter<boolean>();
-  @Input() groups: Array<Groups> = [];
+  @Input() public groups: Array<Groups> = [];
 
   stopPropagation(e: Event): void {
     e.stopPropagation();
@@ -32,9 +31,7 @@ export class EditProfileComponent {
         if (res.ok) {
           this.userService.user.username = res.data?.username;
           this.userService.user.image = res.data?.image;
-
           this.customError = res.msg;
-
           this.editProfile.emit(false);
           this.groups.map(({ members }) => {
             this.socket.emit(

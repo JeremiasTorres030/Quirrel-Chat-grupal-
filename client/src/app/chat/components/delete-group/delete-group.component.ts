@@ -16,12 +16,12 @@ export class DeleteGroupComponent implements OnInit {
   public gid!: string;
   @Input() gname!: string;
   @Input() gmembers!: Array<GroupMembers>;
-  @Output() cerrarEliminarGrupo = new EventEmitter<boolean>();
-  public formularioParaEliminar: FormGroup = this.fb.group(
+  @Output() closeDeleteGroup = new EventEmitter<boolean>();
+  public deleteGroupForm: FormGroup = this.fb.group(
     {
       gid: ['', Validators.required],
-      nombre: ['', [Validators.required]],
-      eliminar: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      delete: ['', [Validators.required]],
     },
     { validators: [deleteGroupValidator] }
   );
@@ -38,12 +38,12 @@ export class DeleteGroupComponent implements OnInit {
       this.gid = id;
     });
 
-    this.formularioParaEliminar.get('nombre')?.setValue(this.gname);
-    this.formularioParaEliminar.get('gid')?.setValue(this.gid);
+    this.deleteGroupForm.get('name')?.setValue(this.gname);
+    this.deleteGroupForm.get('gid')?.setValue(this.gid);
   }
 
-  eliminarGrupo(): void {
-    if (this.formularioParaEliminar.valid) {
+  deleteGroup(): void {
+    if (this.deleteGroupForm.valid) {
       this.groupService.deleteGroup(this.gid).subscribe((res) => {
         if (res.ok) {
           this.socket.emit(
@@ -59,7 +59,7 @@ export class DeleteGroupComponent implements OnInit {
     e.stopPropagation();
   }
 
-  activarEliminarGrupo(): void {
-    this.cerrarEliminarGrupo.emit(false);
+  activateDeleteGroup(): void {
+    this.closeDeleteGroup.emit(false);
   }
 }

@@ -19,17 +19,13 @@ export class EditGroupComponent implements OnInit {
   public gid!: string;
   public socket = this.userService.socket;
   @Input() gmembers: Array<GroupMembers> = [];
-
   public customError!: string;
-
   @Output() public editGroup = new EventEmitter<boolean>();
-
   ngOnInit(): void {
     this.activatedRouter.params.subscribe(({ id }) => {
       this.gid = id;
     });
   }
-
   constructor(
     private fb: FormBuilder,
     private groupService: GroupService,

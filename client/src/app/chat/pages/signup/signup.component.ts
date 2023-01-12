@@ -10,6 +10,7 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent {
+  public socket = this.userService.socket;
   public signUpForm: FormGroup = this.fb.group(
     {
       username: ['', [Validators.required]],
@@ -21,7 +22,7 @@ export class SignupComponent {
     { validators: [passwordValidator] }
   );
 
-  public errorPersonalizado!: string;
+  public customError!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -42,12 +43,12 @@ export class SignupComponent {
           next: (res) => {
             if (res.ok) {
               this.router.navigateByUrl('/user/lobby');
-              this.userService.socket.emit('userID', res.data.uid);
+              this.socket.emit('userID', res.data.uid);
             }
           },
 
           error: (error) => {
-            this.errorPersonalizado = error.error.msg;
+            this.customError = error.error.msg;
           },
         });
     }

@@ -73,7 +73,7 @@ form input:focus {
   margin-bottom: 5px;
 }
 
-.editGroupFormCard .cerrarEditarGrupo {
+.editGroupFormCard .closeEditGroup {
   width: fit-content;
   height: fit-content;
   position: absolute;

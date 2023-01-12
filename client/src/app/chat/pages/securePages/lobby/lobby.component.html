@@ -1,7 +1,7 @@
 <div class="lobby">
   <app-sidebar></app-sidebar>
   <app-notification
-    (actualizarInvitaciones)="actualizarInvitacion()"
+    (updateInivtationsList)="updateInvitations()"
   ></app-notification>
 
   <div class="listOfInvitations">
@@ -11,8 +11,8 @@
       <p>
         El usuario {{ item.username }} te ha invitado a {{ item.groupName }}
       </p>
-      <button (click)="aceptarInvitacion(item.groupID)">Aceptar</button>
-      <button (click)="rechazarInvitacion(item.groupID)">Rechazar</button>
+      <button (click)="acceptInvitation(item.groupID)">Aceptar</button>
+      <button (click)="declineInvitation(item.groupID)">Rechazar</button>
     </div>
   </div>
 </div>

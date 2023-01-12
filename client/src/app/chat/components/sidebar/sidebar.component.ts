@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User, Groups } from 'src/types';
@@ -10,19 +10,17 @@ import { UserService } from '../../services/user.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
-export class SidebarComponent implements AfterViewInit, OnInit {
+export class SidebarComponent implements OnInit {
   public groupForm: FormGroup = this.fb.group({
     groupname: ['', [Validators.required, Validators.minLength(3)]],
     image: [''],
   });
-
   public socket = this.userService.socket;
-  public ventana: boolean = false;
+  public showCreateGroupForm: boolean = false;
   public user!: User;
   public userGroups: Array<Groups> = [];
   public userOptions: boolean = false;
   public editProfile: boolean = false;
-
   constructor(
     private fb: FormBuilder,
     private groupService: GroupService,
@@ -31,32 +29,8 @@ export class SidebarComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.socket.off('deleteGroup');
     this.user = this.userService.user;
-
-    this.userService.socket.on('editGroup', () => {
-      this.groupService.getAllUserGroups().subscribe((res) => {
-        if (res.ok) {
-          if (res.groupData !== undefined) {
-            this.userGroups = res.groupData;
-          }
-        }
-      });
-    });
-
-    this.userService.socket.on('deleteGroup', () => {
-      this.groupService.getAllUserGroups().subscribe((res) => {
-        if (res.ok) {
-          if (res.groupData !== undefined) {
-            this.userGroups = res.groupData;
-          }
-        }
-      });
-
-      this.router.navigateByUrl('/user/lobby');
-    });
-  }
-
-  ngAfterViewInit(): void {
     this.groupService.getAllUserGroups().subscribe((res) => {
       if (res.ok) {
         if (res.groupData !== undefined) {
@@ -64,18 +38,32 @@ export class SidebarComponent implements AfterViewInit, OnInit {
         }
       }
     });
+
+    this.socket.on('editGroup', () => {
+      this.groupService.getAllUserGroups().subscribe((res) => {
+        if (res.ok) {
+          if (res.groupData !== undefined) {
+            this.userGroups = res.groupData;
+          }
+        }
+      });
+    });
+
+    this.socket.on('deleteGroup', () => {
+      this.router.navigateByUrl('/user/lobby');
+    });
   }
 
-  ventanaCrear(): void {
-    this.ventana = !this.ventana;
+  showCreateGroupFormButton(): void {
+    this.showCreateGroupForm = !this.showCreateGroupForm;
   }
 
-  crearGrupo(): void {
+  createGroup(): void {
     if (this.groupForm.valid) {
       this.groupService.createGroup(this.groupForm.value).subscribe((res) => {
         if (res.ok) {
           this.userGroups.push(res.data);
-          this.ventanaCrear();
+          this.showCreateGroupFormButton();
         }
       });
     }
@@ -89,7 +77,7 @@ export class SidebarComponent implements AfterViewInit, OnInit {
     this.userOptions = !this.userOptions;
   }
 
-  cerrarSesion(): void {
+  logOut(): void {
     localStorage.removeItem('token');
     this.userService.user = {
       email: '',
@@ -103,7 +91,7 @@ export class SidebarComponent implements AfterViewInit, OnInit {
     this.router.navigateByUrl('/inicio');
   }
 
-  editarPerfil(): void {
+  showEditProfileForm(): void {
     this.editProfile = !this.editProfile;
   }
 

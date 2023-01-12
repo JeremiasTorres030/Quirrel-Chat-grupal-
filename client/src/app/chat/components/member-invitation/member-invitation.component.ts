@@ -6,22 +6,20 @@ import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'app-memeber-invitation',
-  templateUrl: './memeber-invitation.component.html',
-  styleUrls: ['./memeber-invitation.component.css'],
+  selector: 'app-member-invitation',
+  templateUrl: './member-invitation.component.html',
+  styleUrls: ['./member-invitation.component.css'],
 })
-export class MemeberInvitationComponent implements OnInit {
-  @Output() activarInvitacion = new EventEmitter<boolean>();
-
-  public errorPersonalizado!: string;
-  public gid!: string;
-
+export class MemberInvitationComponent implements OnInit {
+  @Output() activateInvitation = new EventEmitter<boolean>();
   @Input() public listOfMembers!: Array<GroupMembers>;
+  public socket = this.userService.socket;
+  public customError!: string;
+  public gid!: string;
   public showListOfMembers!: Array<GroupMembers>;
-
-  public formularioDeInvitacion: FormGroup = this.fb.group({
-    miembro: ['', [Validators.required]],
-    miembroID: ['', [Validators.required]],
+  public invitationForm: FormGroup = this.fb.group({
+    member: ['', [Validators.required]],
+    memberID: ['', [Validators.required]],
   });
 
   constructor(
@@ -36,27 +34,26 @@ export class MemeberInvitationComponent implements OnInit {
       this.gid = id;
     });
 
-    this.formularioDeInvitacion
-      .get('miembro')
-      ?.valueChanges.subscribe((res) => this.buscador(res));
+    this.invitationForm
+      .get('member')
+      ?.valueChanges.subscribe((res) => this.searcher(res));
   }
 
-  cerrarInvitacion(): void {
-    this.activarInvitacion.emit(false);
+  closeInvitation(): void {
+    this.activateInvitation.emit(false);
   }
 
   stopPropagation(e: MouseEvent): void {
     e.stopPropagation();
   }
 
-  seleccionarUsuario(id: string, username: string | undefined): void {
-    this.formularioDeInvitacion.get('miembro')?.setValue(username);
-    this.formularioDeInvitacion.get('miembroID')?.setValue(id);
+  selectUser(id: string, username: string | undefined): void {
+    this.invitationForm.get('member')?.setValue(username);
+    this.invitationForm.get('memberID')?.setValue(id);
   }
 
-  buscador(res: string): void {
+  searcher(res: string): void {
     const value = res.toLowerCase();
-
     const usersFounded = this.listOfMembers?.filter((user) => {
       return user.username?.toLowerCase().includes(value);
     });
@@ -64,19 +61,19 @@ export class MemeberInvitationComponent implements OnInit {
     this.showListOfMembers = usersFounded;
   }
 
-  enviarInvitacion(): void {
-    if (this.formularioDeInvitacion.valid) {
+  sendInvitation(): void {
+    if (this.invitationForm.valid) {
       this.groupService
         .sendInvitationGroup({
-          inviteid: this.formularioDeInvitacion.get('miembroID')?.value,
+          inviteid: this.invitationForm.get('memberID')?.value,
           uid: this.userService.user.uid,
           gid: this.gid,
         })
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.errorPersonalizado = 'Invitacion enviada';
-              this.userService.socket.emit('invitation', {
+              this.customError = 'Invitacion enviada';
+              this.socket.emit('invitation', {
                 user: res.data.user,
                 groupname: res.data.groupname,
                 gid: res.data.gid,
@@ -86,7 +83,7 @@ export class MemeberInvitationComponent implements OnInit {
           },
 
           error: (error) => {
-            this.errorPersonalizado = error.error.msg;
+            this.customError = error.error.msg;
           },
         });
     }

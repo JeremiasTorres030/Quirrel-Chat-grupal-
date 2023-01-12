@@ -11,7 +11,7 @@ export const passwordValidator = (control: AbstractControl): null | {} => {
 };
 
 export const deleteGroupValidator = (control: AbstractControl): null | {} => {
-  if (control.get('eliminar')?.value !== control.get('nombre')?.value) {
+  if (control.get('delete')?.value !== control.get('name')?.value) {
     return {
       notEqual: true,
     };

@@ -6,7 +6,6 @@ export const getAllGroups = async (
 ): Promise<void> => {
   try {
     const response = await group.find()
-
     if (response !== null) {
       res.status(200).json({
         ok: true,
@@ -14,7 +13,6 @@ export const getAllGroups = async (
       })
       return
     }
-
     res.status(404).json({
       ok: false,
       msg: 'No se encontro ningun grupo',
@@ -85,11 +83,13 @@ export const createGroup = async (
 
   try {
     const response = await group.create({ groupname, image })
-
-    res.status(200).json({
-      ok: true,
-      data: response,
-    })
+    if (response !== null) {
+      res.status(200).json({
+        ok: true,
+        data: response,
+      })
+      return
+    }
   } catch (error) {
     console.log(error)
     res.status(500).json({
@@ -117,14 +117,13 @@ export const deleteGroup = async (
             groups: findUsers.groups,
           })
         }
-        return
       })
+      res.status(200).json({
+        ok: true,
+        msg: 'Grupo eliminado',
+      })
+      return
     }
-
-    res.status(200).json({
-      ok: true,
-      msg: 'Grupo eliminado',
-    })
   } catch (error) {
     console.log(error)
     res.status(500).json({
@@ -146,7 +145,7 @@ export const addMemberGroup = async (
       if (findGroup.members.length === 0) {
         findGroup.members.push({ uid, rol: 'admin' })
       } else {
-        findGroup.members.push({ uid, rol: 'member' })
+        findGroup.members.push({ uid, rol: 'miembro' })
       }
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -202,24 +201,33 @@ export const allUserGroup = async (
     if (response !== null) {
       const groupData = await Promise.all(
         response?.groups?.map(async (groupID) => {
-          return await group.findById(groupID)
+          const groupResponse = await group.findById(groupID)
+          if (groupResponse !== null) {
+            return {
+              image: groupResponse?.image,
+              _id: groupResponse?.id,
+              groupname: groupResponse?.groupname,
+              members: groupResponse?.members,
+            }
+          }
+
+          return null
         })
       )
 
       if (groupData.length !== 0) {
         res.status(200).json({
           ok: true,
-          groupData,
+          groupData: groupData.filter((group) => {
+            return group !== null
+          }),
         })
-
         return
       }
-
       res.status(200).json({
         ok: true,
-        data: [],
+        groupData: [],
       })
-
       return
     }
 
@@ -344,6 +352,7 @@ export const deleteInvitationGroup = async (
         ok: true,
         msg: 'Invitacion rechazada con exito',
       })
+      return
     }
   } catch (error) {
     console.log(error)
@@ -419,15 +428,13 @@ export const editGroup = async (req: Request, res: Response): Promise<void> => {
 
   try {
     const response = await group.findByIdAndUpdate(gid, data, { new: true })
-
-    res.status(200).json({
-      ok: true,
-      data: {
-        image: response?.image,
-        groupname: response?.groupname,
-      },
-      msg: 'Editado con exito',
-    })
+    if (response !== null) {
+      res.status(200).json({
+        ok: true,
+        msg: 'Editado con exito',
+      })
+      return
+    }
   } catch (error) {
     console.log(error)
     res.status(500).json({

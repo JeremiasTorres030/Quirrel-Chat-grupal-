@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvitationData } from 'src/types';
 import { GroupService } from '../../services/group.service';
@@ -10,33 +10,35 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./notification.component.css'],
 })
 export class NotificationComponent implements OnInit {
+  public activate: boolean = false;
+  public data!: InvitationData;
+  public gid!: string;
+  public socket = this.userServices.socket;
+  @Output() updateInivtationsList = new EventEmitter<void>();
   constructor(
     private userServices: UserService,
     private groupService: GroupService,
     private router: Router,
     private routerActive: ActivatedRoute
   ) {}
-  public activar: boolean = false;
-  public data!: InvitationData;
-  public gid!: string;
-  @Output() actualizarInvitaciones = new EventEmitter<void>();
 
   ngOnInit(): void {
+    this.socket.off('invitationClient');
     this.routerActive.params.subscribe(({ id }) => {
       this.gid = id;
     });
 
-    this.userServices.socket.on('invitationClient', (data) => {
-      this.activarNotificacion(data);
+    this.socket.on('invitationClient', (data) => {
+      this.activateNotification(data);
     });
   }
 
-  activarNotificacion(data: InvitationData): void {
-    this.activar = !this.activar;
+  activateNotification(data: InvitationData): void {
+    this.activate = !this.activate;
     this.data = data;
   }
 
-  aceptarInvitacion(): void {
+  acceptInvitation(): void {
     this.groupService
       .addMemberGroup({
         gid: this.data.gid,
@@ -55,21 +57,21 @@ export class NotificationComponent implements OnInit {
           });
         }
       });
-    this.activar = false;
+    this.activate = false;
   }
 
-  rechazarInvitacion(): void {
+  declineInvitation(): void {
     this.groupService
       .deniedInvitationGroup({
         uid: this.data.userInvited,
         gid: this.data.gid,
       })
       .subscribe();
-    this.activar = false;
+    this.activate = false;
   }
 
-  cerrarInvitacion(): void {
-    this.actualizarInvitaciones.emit();
-    this.activar = false;
+  closeInvitation(): void {
+    this.updateInivtationsList.emit();
+    this.activate = false;
   }
 }

@@ -1,7 +1,9 @@
 <div class="sideBar">
   <div class="createAndGroups">
     <button routerLink="/user/lobby" class="lobby">Lobby</button>
-    <button (click)="ventanaCrear()" class="create">Crear Grupo</button>
+    <button (click)="showCreateGroupFormButton()" class="create">
+      Crear Grupo
+    </button>
     <div class="groups">
       <div
         *ngFor="let item of userGroups; let i = index"
@@ -21,20 +23,24 @@
       />
       <div *ngIf="userOptions" class="userOptions">
         <h3>{{ user.username }}</h3>
-        <button (click)="editarPerfil()" class="editButton">
+        <button (click)="showEditProfileForm()" class="editButton">
           Editar perfil
         </button>
-        <button (click)="cerrarSesion()" class="logoutButton">
-          Cerrar sesion
-        </button>
+        <button (click)="logOut()" class="logoutButton">Cerrar sesion</button>
       </div>
     </div>
   </div>
-  <div class="createGroupForm" (click)="ventanaCrear()" *ngIf="ventana">
+  <div
+    class="createGroupForm"
+    (click)="showCreateGroupFormButton()"
+    *ngIf="showCreateGroupForm"
+  >
     <div class="createGroupFormCard" (click)="stopPropagation($event)">
-      <button class="closeCreateGroup" (click)="ventanaCrear()">X</button>
+      <button class="closeCreateGroup" (click)="showCreateGroupFormButton()">
+        X
+      </button>
       <h1>Crear Grupo</h1>
-      <form [formGroup]="groupForm" (ngSubmit)="crearGrupo()">
+      <form [formGroup]="groupForm" (ngSubmit)="createGroup()">
         <label>Nombre del Grupo</label>
         <input
           type="text"
@@ -54,8 +60,8 @@
 
   <app-edit-profile
     *ngIf="editProfile"
-    (click)="editarPerfil()"
-    (editProfile)="editarPerfil()"
+    (click)="showEditProfileForm()"
+    (editProfile)="showEditProfileForm()"
     [groups]="userGroups"
   ></app-edit-profile>
 </div>

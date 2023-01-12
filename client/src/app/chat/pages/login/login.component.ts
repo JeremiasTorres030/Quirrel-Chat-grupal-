@@ -13,9 +13,8 @@ export class LoginComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
   });
-
   public customError!: string;
-
+  public socket = this.userService.socket;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -30,7 +29,7 @@ export class LoginComponent {
           if (res.ok) {
             this.groupService.getAllUserGroups().subscribe();
             this.router.navigateByUrl('/user/lobby');
-            this.userService.socket.emit('userID', res.data.uid);
+            this.socket.emit('userID', res.data.uid);
           }
         },
         error: (error) => {

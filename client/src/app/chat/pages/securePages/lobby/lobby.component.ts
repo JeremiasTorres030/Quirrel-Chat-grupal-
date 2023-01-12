@@ -11,6 +11,7 @@ import { Invivtations } from 'src/types';
 })
 export class LobbyComponent implements OnInit {
   public invitations!: Array<Invivtations>;
+  public socket = this.userService.socket;
 
   constructor(
     private userService: UserService,
@@ -22,7 +23,7 @@ export class LobbyComponent implements OnInit {
     this.invitations = this.userService.user.invitations;
   }
 
-  aceptarInvitacion(gid: string): void {
+  acceptInvitation(gid: string): void {
     this.groupService
       .addMemberGroup({
         gid,
@@ -33,18 +34,18 @@ export class LobbyComponent implements OnInit {
           this.router.navigateByUrl(`/user/group/${res.data.gid}`);
           this.groupService.getUnicGroup(res.data.gid).subscribe((res) => {
             if (res.ok) {
-              this.userService.socket.emit(
+              this.socket.emit(
                 'updateGroup',
                 res.groupData.members.map(({ uid }) => uid)
               );
             }
           });
-          this.actualizarInvitacion();
+          this.updateInvitations();
         }
       });
   }
 
-  rechazarInvitacion(gid: string): void {
+  declineInvitation(gid: string): void {
     this.groupService
       .deniedInvitationGroup({
         uid: this.userService.user.uid,
@@ -52,12 +53,12 @@ export class LobbyComponent implements OnInit {
       })
       .subscribe((res) => {
         if (res.ok) {
-          this.actualizarInvitacion();
+          this.updateInvitations();
         }
       });
   }
 
-  actualizarInvitacion(): void {
+  updateInvitations(): void {
     this.userService.getUserInvitations().subscribe((res) => {
       if (res.ok) {
         this.invitations = this.userService.user.invitations;

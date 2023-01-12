@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LayoutModule } from '@angular/cdk/layout';
 
 import { ChatRoutingModule } from './chat-routing.module';
 import { LoginComponent } from './pages/login/login.component';
@@ -15,7 +16,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 import { UsernameNotFoundPipe } from './pipes/username-not-found.pipe';
 import { EditGroupComponent } from './components/edit-group/edit-group.component';
 import { DeleteGroupComponent } from './components/delete-group/delete-group.component';
-import { MemeberInvitationComponent } from './components/memeber-invitation/memeber-invitation.component';
+import { MemberInvitationComponent } from './components/member-invitation/member-invitation.component';
 
 @NgModule({
   declarations: [
@@ -31,8 +32,8 @@ import { MemeberInvitationComponent } from './components/memeber-invitation/meme
     UsernameNotFoundPipe,
     EditGroupComponent,
     DeleteGroupComponent,
-    MemeberInvitationComponent,
+    MemberInvitationComponent,
   ],
-  imports: [CommonModule, ChatRoutingModule, ReactiveFormsModule],
+  imports: [CommonModule, ChatRoutingModule, ReactiveFormsModule, LayoutModule],
 })
 export class ChatModule {}

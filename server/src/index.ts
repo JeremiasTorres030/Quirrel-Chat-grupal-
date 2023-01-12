@@ -10,7 +10,7 @@ import cors from 'cors'
 const app = express()
 export const server = createServer(app)
 
-export const io = new Server(server, { cors: { origin: '*' } })
+const io = new Server(server, { cors: { origin: '*' } })
 
 let usersConnected: Array<{ userID: string; socketID: string }> = []
 

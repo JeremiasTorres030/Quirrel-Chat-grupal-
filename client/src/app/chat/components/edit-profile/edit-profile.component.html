@@ -1,6 +1,6 @@
 <div class="editProfileForm">
   <div class="editProfileFormCard" (click)="stopPropagation($event)">
-    <button class="cerrarEditarPerfil" (click)="closeEditProfile()">X</button>
+    <button class="closeEditProfile" (click)="closeEditProfile()">X</button>
     <h1>Editar Perfil</h1>
     <form [formGroup]="editUserForm" (ngSubmit)="submitEditProfile()">
       <label>Nombre de usuario</label>

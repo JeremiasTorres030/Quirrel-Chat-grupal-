@@ -11,15 +11,13 @@ import { UserService } from '../../services/user.service';
 })
 export class MembersBarComponent implements OnInit {
   @Input() groupMembers!: Array<GroupMembers>;
-  @Input() permisosDeAdmin!: boolean;
+  @Input() adminRole!: boolean;
   @Input() gname!: string;
-
+  public socket = this.userService.socket;
   public listOfMembers!: Array<GroupMembers>;
   public gid!: string;
-
-  public mostrarInvitacion: boolean = false;
-  public mostrarEliminarGrupo: boolean = false;
-
+  public showInvitationForm: boolean = false;
+  public showDeleteGroupForm: boolean = false;
   constructor(
     private userService: UserService,
     private groupService: GroupService,
@@ -34,21 +32,21 @@ export class MembersBarComponent implements OnInit {
     });
   }
 
-  activarInvitacion(): void {
-    this.mostrarInvitacion = !this.mostrarInvitacion;
-    if (this.mostrarInvitacion) {
+  activateInvitationForm(): void {
+    this.showInvitationForm = !this.showInvitationForm;
+    if (this.showInvitationForm) {
       this.userService.getAllusers().subscribe((res) => {
         this.listOfMembers = res.data;
       });
     }
   }
 
-  salirDelGrupo(): void {
+  exitGroup(): void {
     this.groupService
       .exitGroup(this.userService.user.uid, this.gid)
       .subscribe((res) => {
         if (res.ok) {
-          this.userServices.socket.emit(
+          this.socket.emit(
             'updateGroup',
             this.groupMembers.map(({ uid }) => uid)
           );
@@ -67,7 +65,7 @@ export class MembersBarComponent implements OnInit {
     }
   }
 
-  eliminarGrupo(): void {
-    this.mostrarEliminarGrupo = !this.mostrarEliminarGrupo;
+  deleteGroup(): void {
+    this.showDeleteGroupForm = !this.showDeleteGroupForm;
   }
 }

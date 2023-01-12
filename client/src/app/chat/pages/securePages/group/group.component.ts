@@ -1,8 +1,9 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { GroupService } from 'src/app/chat/services/group.service';
 import { UserService } from 'src/app/chat/services/user.service';
-import { GroupMembers, GroupMembersMessages, GroupMessages } from 'src/types';
+import { GroupMembers, GroupMessages } from 'src/types';
 
 @Component({
   selector: 'app-group',
@@ -10,72 +11,91 @@ import { GroupMembers, GroupMembersMessages, GroupMessages } from 'src/types';
   styleUrls: ['./group.component.css'],
 })
 export class GroupComponent implements OnInit, AfterViewChecked {
-  public groupMessage!: Array<GroupMessages | GroupMembersMessages>;
+  public groupMessage!: Array<GroupMessages>;
   public groupMembers!: Array<GroupMembers>;
   public user: string = this.userService.user.uid;
   public gid!: string;
   public gname!: string;
-  public permisosDeAdmin: boolean = false;
+  public adminRole: boolean = false;
   public editGroup: boolean = false;
+  public smallScreen!: boolean;
+  public hideSideBar!: boolean;
+  public hideMembersBar!: boolean;
+  public socket = this.userService.socket;
   constructor(
     private groupService: GroupService,
     private userService: UserService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private breakpointObserver: BreakpointObserver
   ) {}
   ngAfterViewChecked(): void {
-    this.moverScroll();
+    this.moveScrollBar();
   }
 
   ngOnInit(): void {
+    this.socket.off('updateGroup');
+    this.socket.off('editGroup');
+    this.breakpointObserver
+      .observe(['(min-width: 901px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.smallScreen = true;
+          this.hideMembersBar = true;
+          this.hideSideBar = true;
+        } else {
+          this.smallScreen = false;
+          this.hideMembersBar = false;
+          this.hideSideBar = false;
+        }
+      });
+
     this.activeRoute?.params?.subscribe(({ id }) => {
       this.gid = id;
-      this.actualizarGrupo();
+      this.updateGroup();
     });
 
-    this.userService.socket.on('updateGroup', () => {
-      this.actualizarGrupo();
-      this.moverScroll();
+    this.socket.on('updateGroup', () => {
+      this.updateGroup();
+      this.moveScrollBar();
     });
 
-    this.userService.socket.on('editGroup', () => {
-      this.actualizarGrupo();
+    this.socket.on('editGroup', () => {
+      this.updateGroup();
     });
   }
 
-  actualizarGrupo(): void {
+  updateGroup(): void {
     this.groupService.getUnicGroup(this.gid).subscribe({
       next: (res) => {
         if (res.ok) {
           this.gname = res.groupData.groupname;
-          this.rellenarMensajes(res.groupData.messages, res.membersData);
+          this.fillMessagesData(res.groupData.messages, res.membersData);
         }
       },
       error: () => {
-        console.log(this.gid);
         this.router.navigateByUrl('/user/lobby');
       },
     });
   }
 
-  actualizarMensajes(event: Array<GroupMessages>): void {
-    this.rellenarMensajes(event, this.groupMembers);
+  updateMessages(event: Array<GroupMessages>): void {
+    this.fillMessagesData(event, this.groupMembers);
+    this.moveScrollBar();
   }
 
-  rellenarMensajes = (
+  fillMessagesData = (
     messages: Array<GroupMessages>,
     members: Array<GroupMembers>
   ): void => {
-    let arrayDATA: Array<GroupMembersMessages> = [];
+    let arrayDATA: Array<GroupMessages> = [];
 
     messages.forEach(({ uid, message, type }) => {
       const userdata = members.find((element) => {
         return element.uid === uid;
       });
 
-      if (userdata?.uid) {
-        arrayDATA.push({ ...userdata, message, type });
-      }
+      arrayDATA.push({ ...userdata, message, type });
     });
 
     this.groupMessage = arrayDATA;
@@ -84,7 +104,7 @@ export class GroupComponent implements OnInit, AfterViewChecked {
     this.admin();
   };
 
-  moverScroll(): void {
+  moveScrollBar(): void {
     document.getElementById('chat')?.scrollTo(0, 10000);
   }
 
@@ -105,14 +125,22 @@ export class GroupComponent implements OnInit, AfterViewChecked {
 
     if (user !== undefined) {
       if (user.rol === 'admin') {
-        this.permisosDeAdmin = true;
+        this.adminRole = true;
       } else {
-        this.permisosDeAdmin = false;
+        this.adminRole = false;
       }
     }
   }
 
   editGroupButton(): void {
     this.editGroup = !this.editGroup;
+  }
+
+  hideSideBarButton(): void {
+    this.hideSideBar = !this.hideSideBar;
+  }
+
+  hideMemberBarButton(): void {
+    this.hideMembersBar = !this.hideMembersBar;
   }
 }
