@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+/* eslint-disable @typescript-eslint/no-misused-promises */
+const express_1 = require("express");
+const express_validator_1 = require("express-validator");
+const group_controllers_1 = require("../controllers/group.controllers");
+const validarCampos_1 = require("../middleware/validarCampos");
+exports.router = (0, express_1.Router)();
+exports.router.get('/api/group/all', group_controllers_1.getAllGroups);
+exports.router.get('/api/group/:id', group_controllers_1.getUnicGroup);
+exports.router.post('/api/group/new', (0, express_validator_1.check)('groupname', 'El nombre del grupo es obligatorio').isString(), validarCampos_1.validarCampos, group_controllers_1.createGroup);
+exports.router.delete('/api/group/delete/:gid', group_controllers_1.deleteGroup);
+exports.router.put('/api/group/edit/:id');
+exports.router.post('/api/group/member/add', group_controllers_1.addMemberGroup);
+exports.router.post('/api/group/member/invite', group_controllers_1.inviteMemberGroup);
+exports.router.delete('/api/group/member/invite/denied/:uid/:gid', group_controllers_1.deleteInvitationGroup);
+exports.router.delete('/api/group/member/exit/:uid/:gid', group_controllers_1.exitGroup);
+exports.router.get('/api/group/usergroup/:id', group_controllers_1.allUserGroup);
+exports.router.get('/api/group/messages/:id', group_controllers_1.getMessagesGroup);
+exports.router.put('/api/group/edit/:gid', group_controllers_1.editGroup);

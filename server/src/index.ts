@@ -5,6 +5,7 @@ import { connectDB } from './database/db'
 import { router as RouterUser } from './routes/users.routes'
 import { router as RouterGroup } from './routes/group.routes'
 import { router as RouterMessage } from './routes/message.routes'
+import { join } from 'path'
 import cors from 'cors'
 
 const app = express()
@@ -78,6 +79,11 @@ app.use(express.json())
 app.use(RouterUser)
 app.use(RouterGroup)
 app.use(RouterMessage)
+app.use(express.static(join(__dirname, '../../client/build')))
+
+app.get('*', (_req, res) => {
+  res.sendFile(join(__dirname, '../../client/build/index.html'))
+})
 
 server.listen(3000, () => {
   console.log('El servidor esta corriendo en el puerto 3000')
