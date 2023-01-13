@@ -16,7 +16,9 @@ const env_config_1 = require("./env.config");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 exports.server = (0, http_1.createServer)(app);
-const io = new socket_io_1.Server(exports.server, { cors: { origin: '*' } });
+const io = new socket_io_1.Server(exports.server, {
+    cors: { origin: 'https://chat-production-fd71.up.railway.app/' },
+});
 let usersConnected = [];
 io.on('connection', (client) => {
     client.on('userID', (userID) => {

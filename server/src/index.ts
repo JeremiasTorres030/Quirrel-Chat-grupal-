@@ -12,7 +12,9 @@ import cors from 'cors'
 const app = express()
 export const server = createServer(app)
 
-const io = new Server(server, { cors: { origin: '*' } })
+const io = new Server(server, {
+  cors: { origin: 'https://chat-production-fd71.up.railway.app/' },
+})
 
 let usersConnected: Array<{ userID: string; socketID: string }> = []
 
