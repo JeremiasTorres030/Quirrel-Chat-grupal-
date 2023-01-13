@@ -12,6 +12,7 @@ const users_routes_1 = require("./routes/users.routes");
 const group_routes_1 = require("./routes/group.routes");
 const message_routes_1 = require("./routes/message.routes");
 const path_1 = require("path");
+const env_config_1 = require("./env.config");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 exports.server = (0, http_1.createServer)(app);
@@ -75,6 +76,6 @@ app.use(express_1.default.static((0, path_1.join)(__dirname, '../../client/build
 app.get('*', (_req, res) => {
     res.sendFile((0, path_1.join)(__dirname, '../../client/build/index.html'));
 });
-exports.server.listen(3000, () => {
+exports.server.listen((0, env_config_1.PORT)(), () => {
     console.log('El servidor esta corriendo en el puerto 3000');
 });

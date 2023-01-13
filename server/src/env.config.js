@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MONGO_URI = exports.SECRET_JWT_SEED = void 0;
+exports.PORT = exports.MONGO_URI = exports.SECRET_JWT_SEED = void 0;
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 const SECRET_JWT_SEED = () => {
@@ -17,3 +17,10 @@ const MONGO_URI = () => {
     return '';
 };
 exports.MONGO_URI = MONGO_URI;
+const PORT = () => {
+    if (process.env.PORT !== undefined) {
+        return process.env.PORT;
+    }
+    return '';
+};
+exports.PORT = PORT;

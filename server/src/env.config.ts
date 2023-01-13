@@ -15,3 +15,10 @@ export const MONGO_URI = (): string => {
   }
   return ''
 }
+
+export const PORT = (): string => {
+  if (process.env.PORT !== undefined) {
+    return process.env.PORT
+  }
+  return ''
+}
