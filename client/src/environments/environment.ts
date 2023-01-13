@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  apiUrl: 'http://localhost:3000/api/',
-  socket: 'http://localhost:3000/',
+  apiUrl: 'https://chat-production-fd71.up.railway.app/api/',
+  socket: 'https://chat-production-fd71.up.railway.app/',
   production: false,
 };
 
