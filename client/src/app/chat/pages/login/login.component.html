@@ -1,20 +1,20 @@
 <div class="loginComponent">
   <div class="loginCard">
-    <h1>Iniciar Sesion</h1>
+    <h1>Iniciar Sesión</h1>
     <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="login()">
       <label class="error">{{ customError }}</label>
-      <label>Correo electronico</label>
+      <label>Correo electrónico</label>
       <input
         type="email"
         formControlName="email"
-        placeholder="Ingrese su correo electronico"
+        placeholder="Ingrese su correo electrónico"
       />
       <label
         *ngIf="
           loginForm.get('email')?.errors && loginForm.get('email')?.touched
         "
         class="error"
-        >Ingrese un correo vaildo</label
+        >Ingrese un correo válido</label
       >
 
       <label>Contraseña</label>
@@ -29,12 +29,12 @@
           loginForm.get('password')?.errors &&
           loginForm.get('password')?.touched
         "
-        >Ingrese una contraseña vailda</label
+        >Ingrese una contraseña válida</label
       >
       <button type="submit" [disabled]="loginForm.invalid">
-        Iniciar sesion
+        Iniciar sesión
       </button>
     </form>
-    <a routerLink="/sign-up">No estas registrado? clickea aqui.</a>
+    <a routerLink="/sign-up">¿No estás registrado? clickea aquí.</a>
   </div>
 </div>

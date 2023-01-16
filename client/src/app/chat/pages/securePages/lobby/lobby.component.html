@@ -6,7 +6,7 @@
 
   <div class="listOfInvitations">
     <h1>Invitaciones</h1>
-    <p *ngIf="invitations.length === 0" class="invitationItem">Vacio . . .</p>
+    <p *ngIf="invitations.length === 0" class="invitationItem">Vacío . . .</p>
     <div *ngFor="let item of invitations" class="invitationItem">
       <p>
         El usuario {{ item.username }} te ha invitado a {{ item.groupName }}
