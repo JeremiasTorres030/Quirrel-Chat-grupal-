@@ -37,5 +37,5 @@ Cliente.
 ```
 ## Estado del proyecto
 
-El proyecto está finalizado.
+El proyecto esta finalizado.
 
