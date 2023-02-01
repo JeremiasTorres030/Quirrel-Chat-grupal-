@@ -2,7 +2,7 @@
   <div class="loginCard">
     <h1>Iniciar Sesión</h1>
     <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="login()">
-      <label class="error">{{ customError }}</label>
+      <label class="error" *ngIf="customError">{{ customError }}</label>
       <label>Correo electrónico</label>
       <input
         type="email"

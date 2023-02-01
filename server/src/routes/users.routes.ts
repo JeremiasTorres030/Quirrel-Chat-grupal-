@@ -33,9 +33,7 @@ router.post(
   '/api/user/login',
   [
     check('email', 'El email es obligatorio').isString().isEmail(),
-    check('password', 'La contraseña es obligatoria')
-      .isString()
-      .isLength({ min: 6 }),
+    check('password', 'La contraseña es obligatoria').isString(),
     validarCampos,
   ],
   loginUser
