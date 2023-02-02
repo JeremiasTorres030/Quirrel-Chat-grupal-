@@ -1,7 +1,7 @@
 
-# Chat
+# Quirrel 
 
-Chat es un proyecto de práctica inspirado en la aplicación de escritorio Discord.
+Quirrel es un proyecto de práctica inspirado en la aplicación de escritorio Discord.
 
 
 ## Variables de entorno
