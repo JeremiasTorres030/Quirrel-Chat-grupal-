@@ -3,6 +3,25 @@
 
 Quirrel es un proyecto de práctica inspirado en la aplicación de escritorio Discord.
 
+[**Demo**](https://chat-production-fd71.up.railway.app/)
+
+## Imagenes
+
+- Pagina de Inicio
+
+![Pagina de inicio](https://res.cloudinary.com/drifqbdtu/image/upload/w_690/v1678409126/Readme/Chat/Inicio_f8rhsq.png)
+
+- Pagina de Grupo
+
+![Pagina de grupo](https://res.cloudinary.com/drifqbdtu/image/upload/w_690/v1678409126/Readme/Chat/grupo_jeukqc.png)
+
+- Mandando un mensaje
+
+![Mandando un mensaje](https://res.cloudinary.com/drifqbdtu/image/upload/v1678409127/Readme/Chat/mandarMensaje_uzftre.gif)
+
+- Notificaion
+
+![Notificacion](https://res.cloudinary.com/drifqbdtu/image/upload/w_690/v1678409954/Readme/Chat/invitacion_qfhiex.png)
 
 ## Variables de entorno
 
@@ -14,21 +33,17 @@ Para inicializar el proyecto se necesita un archivo .env en el directorio "/" co
 
 `PORT` 
 
-
-
-
-
 ## Instalación e inicio para desarrollo
 
 Instalación e inicio para desarrollo.
 
-Servidor.
+- Servidor.
 
 ```bash
   npm install
   npm run dev
 ```
-Cliente.
+- Cliente.
 
 ```bash
   cd client
