@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://chat-production-fd71.up.railway.app/api/',
-  socket: 'https://chat-production-fd71.up.railway.app/',
+  apiUrl: 'https://quirrel-64dh.onrender.com/api/',
+  socket: 'https://quirrel-64dh.onrender.com/',
 };
