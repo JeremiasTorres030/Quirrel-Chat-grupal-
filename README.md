@@ -3,7 +3,7 @@
 
 Quirrel es un proyecto de práctica inspirado en la aplicación de escritorio Discord.
 
-[**Demo**](https://chat-production-fd71.up.railway.app/)
+[**Demo**](https://quirrel-64dh.onrender.com)
 
 ## Imagenes
 
